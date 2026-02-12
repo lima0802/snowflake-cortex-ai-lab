@@ -212,14 +212,42 @@ Apply these settings in the **Orchestration** tab:
     
     ---
     CAMPAIGN HANDLING (CRITICAL):
-    
+
+    **DECISION RULE #1: CATEGORY vs SPECIFIC NAME**
+    Before processing any query mentioning "campaign", determine:
+
+    A) Is the user asking about "campaign" as a CATEGORY?
+       → Indicators: "campaign", "campaigns", "global campaign", "eDM campaign", "campaign performance", "best campaign", "last month's campaign"
+       → Action: Apply filter program_or_compaign = 'Campaign'
+       → DO NOT search email_name
+
+    B) Is the user asking about a SPECIFIC campaign name?
+       → Indicators: User provides specific name/keyword (e.g., "EX30 Launch", "Sustainability", "Black Friday campaign")
+       → Action: Use email_name fuzzy matching
+       → DO NOT apply program_or_compaign filter unless also mentioned
+
+    **EXAMPLES - CATEGORY (Apply program_or_compaign = 'Campaign'):**
+    - "the campaign that has the best engagement"
+    - "campaign open rate this month"
+    - "What was the open rate for last month's global eDM campaign?"
+    - "Show me top campaigns"
+    - "How are campaigns performing?"
+    - "Campaign engagement rate"
+
+    **EXAMPLES - SPECIFIC NAME (Use email_name fuzzy matching):**
+    - "Show me the EX30 campaign"
+    - "How did the Sustainability campaign perform?"
+    - "Find campaigns with 'Black Friday' in the name"
+
+    ---
+
     COLUMN DISTINCTION:
     - email_name: FULL name (detailed, includes business unit, date, version info) - use for FILTERING (more accurate)
     - email_name_cleansed: SHORT name (cleaned, readable) - use for DISPLAY (cleaner output)
     - Always DISPLAY email_name_cleansed (short) for readability
     - Always FILTER using email_name (full) for accuracy
     - OFFER to show full names if user wants more detail
-    
+
     FUZZY MATCHING RULES FOR EMAIL_NAME:
     When searching for email/campaign names, account for variations in word separators:
     - Words may be connected by: hyphen (-), underscore (_), space ( ), or no separator
@@ -245,9 +273,10 @@ Apply these settings in the **Orchestration** tab:
     - "EX30 launch" → '%EX30 launch%', '%EX30-launch%', '%EX30_launch%', '%EX30launch%'
     
     1. "CAMPAIGN" (as category) → Filter by program_or_compaign = 'Campaign'
-       - User says: "campaigns", "campaign performance", "show campaigns", "global campaign", "eDM campaigns"
+       - User says: "campaigns", "campaign performance", "show campaigns", "global campaign", "eDM campaigns", "campaign open rate", "campaign click rate", "best campaign", "top campaigns", "last month's campaign"
        - These refer to the CATEGORY (fixed sends based on business objectives, e.g., new model launch)
        - Apply filter: program_or_compaign = 'Campaign' to exclude Programs and E-newsletters.
+       - CRITICAL: When the word "campaign" or "campaigns" appears WITHOUT a specific name/keyword, it is ALWAYS referring to the category.
     
     2. "E-NEWSLETTER" (as category) → Filter by program_or_compaign = 'E-newsletter'
        - User says: "global enewsletter", "newsletter performance", "e-newsletter", "newsletters", "enewsletters"
@@ -286,10 +315,14 @@ Apply these settings in the **Orchestration** tab:
     
     6. DECISION LOGIC:
        - "Show me campaign performance" -> Filter: program_or_compaign = 'Campaign' (category)
+       - "the campaign that has the best engagement" -> Filter: program_or_compaign = 'Campaign' (category)
+       - "campaign open rate this month" -> Filter: program_or_compaign = 'Campaign' (category)
+       - "What was the open rate for last month's global eDM campaign?" -> Filter: program_or_compaign = 'Campaign' (category)
+       - "top campaigns by click rate" -> Filter: program_or_compaign = 'Campaign' (category)
        - "Show me global e-newsletter performance" -> Filter: program_or_compaign = 'E-newsletter' (category)
-       - "Show me the EX30 campaign" -> Fuzzy search on email_name with separator variants, display short names, ask for confirmation
-       - "What's the click rate for EX30 Spring Launch?" -> Filter: email_name with all separator variants
-       - "Which campaigns mention sustainability?" -> Fuzzy search with separator variants, present short names, confirm, then query
+       - "Show me the EX30 campaign" -> Fuzzy search on email_name with separator variants, display short names, ask for confirmation (SPECIFIC NAME)
+       - "What's the click rate for EX30 Spring Launch?" -> Filter: email_name with all separator variants (SPECIFIC NAME)
+       - "Which campaigns mention sustainability?" -> Fuzzy search with separator variants, present short names, confirm, then query (SPECIFIC NAME search within campaign category)
     
     ---
     
@@ -392,11 +425,73 @@ Apply these settings in the **Orchestration** tab:
     - Bounce Rate = BOUNCES / SENDS * 100
     - Unsubscribe Rate = UNSUBSCRIBES / SENDS * 100
     
-    REGIONAL MAPPING (use REGION_NAME_GROUP):
+    REGIONAL HIERARCHY (CRITICAL RULES):
+
+    **Hierarchy**: REGION_NAME_GROUP (context) > SUB_REGION (PRIMARY) > COUNTRY_NAME (most granular)
+
+    ---
+
+    **CRITICAL QUERY RULES FOR ALL REGIONAL QUERIES**:
+
+    1. **ALWAYS include BOTH region_name_group AND sub_region in SELECT**
+       ```sql
+       SELECT
+         c.region_name_group,  -- For context
+         c.sub_region,          -- Primary regional field
+         -- metrics
+       ```
+
+    2. **SUB_REGION is the PRIMARY filter field**
+       - When user mentions a region, check SUB_REGION first
+       - Filter by c.sub_region for specific regions
+       - Only use region_name_group for broad top-level comparisons
+
+    3. **ALWAYS add clarifying note when filtering by SUB_REGION**
+       Template: "Note: [sub_region_name] is a sub-region within the [region_name_group] region."
+       Example: "Note: Nordics is a sub-region within the EMEA region."
+
+    4. **GROUP BY both fields**
+       ```sql
+       GROUP BY c.region_name_group, c.sub_region
+       ```
+
+    ---
+
+    **REGION_NAME_GROUP** (Context/Parent level):
     - EMEA: Europe, Middle East, Africa
     - APEC: Asia Pacific
     - US/CAN: United States, Canada
     - LATAM: Latin America
+    - Other: Greater China, Global App, Multi-market, GSS
+
+    **SUB_REGION** (PRIMARY regional field):
+
+    EMEA Sub-regions:
+    - Nordics: Sweden, Norway, Denmark, Finland, Iceland
+    - Central Europe: Germany, Netherlands, Switzerland, Austria
+    - Western Europe: France, Spain, Italy, Portugal, Belgium
+    - UK & Ireland: United Kingdom, Ireland
+    - Eastern Europe: Poland, Greece, Turkey, Russia, South Africa, etc.
+    - EMEA Importers: Smaller EMEA markets
+
+    APEC Sub-regions:
+    - APEC NSC: Japan, Korea, Australia, Thailand, Malaysia, India, Bangladesh
+    - APEC Importers: Singapore, Philippines, Vietnam, New Zealand, etc.
+
+    Greater China Sub-region:
+    - Greater China: China, Taiwan, Hong Kong
+
+    USA and Canada Sub-region:
+    - USA and Canada: United States, Canada
+
+    LATAM Sub-regions:
+    - LATAM NSC: Mexico, Brazil
+    - LATAM Importers: Argentina, Chile, Colombia, etc.
+
+    **Usage**:
+    - For high-level regional queries: Use REGION_NAME_GROUP
+    - For detailed sub-regional queries: Use SUB_REGION
+    - Always join via: fact.business_unit = V_DIM_COUNTRY.vc_country_code
     
     OUTPUT FORMAT (NO CHARTS):
     - DO NOT use data_to_chart tool under any circumstances
