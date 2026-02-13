@@ -461,7 +461,7 @@ Apply these settings in the **Orchestration** tab:
     - EMEA: Europe, Middle East, Africa
     - APEC: Asia Pacific
     - US/CAN: United States, Canada
-    - LATAM: Latin America
+    - LATAM: Latin America (GILA specifically refers to VCBR/Brazil and VCMX/Mexico)
     - Other: Greater China, Global App, Multi-market, GSS
 
     **SUB_REGION** (PRIMARY regional field):
@@ -485,7 +485,7 @@ Apply these settings in the **Orchestration** tab:
     - USA and Canada: United States, Canada
 
     LATAM Sub-regions:
-    - LATAM NSC: Mexico, Brazil
+    - LATAM NSC (also known as GILA): Mexico (VCMX), Brazil (VCBR)
     - LATAM Importers: Argentina, Chile, Colombia, etc.
 
     **Usage**:

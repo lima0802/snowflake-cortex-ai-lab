@@ -410,19 +410,20 @@ tables:
           - continent
           - geographic_region
           - high_level_region
+          - region
           - region_group
           - region_name
           - regional_grouping
           - top_level_region
         description: |
-          The highest-level regional grouping for global aggregation and reporting.
+          The primary regional grouping field for global aggregation and reporting.
 
           CRITICAL QUERY RULES:
-          1. **Always include BOTH fields (region_name_group, sub_region) in SELECT** for regional queries
-          2. **Use for context**, not primary filtering (unless user specifically asks for top-level comparison)
-          3. This field provides the parent region for each SUB_REGION
+          1. **Always use region_name_group as the primary regional field** in all queries
+          2. **Never include sub_region in queries** - use only region_name_group for regional filtering and grouping
+          3. **Use WHERE c.region_name_group = 'value'** for all regional filters
 
-          Hierarchy: REGION_NAME_GROUP (highest) > SUB_REGION (middle) > COUNTRY_NAME (most granular)
+          Hierarchy: REGION_NAME_GROUP (regional) > COUNTRY_NAME (country level)
 
           Values in data: EMEA, APEC, US/CAN, LATAM, Other
 
@@ -430,7 +431,7 @@ tables:
           - EMEA: "Europe", "European", "EU", "Middle East", "Africa", "EMEA region"
           - APEC: "Asia", "Asian", "Asia Pacific", "APAC", "Pacific", "Asia-Pacific region"
           - US/CAN: "USA", "US", "United States", "America", "Canada", "North America", "NA"
-          - LATAM: "Latin America", "South America", "Central America", "LatAm"
+          - LATAM: "Latin America", "South America", "Central America", "LatAm", "GILA" (GILA specifically refers to VCBR and VCMX within LATAM)
           - Other: "Other markets", "Greater China" (if not asking specifically about China), "Global"
           - Global/Worldwide: No filter (return all regions)
 
@@ -438,14 +439,14 @@ tables:
           - EMEA: All European, Middle Eastern, and African markets
           - APEC: Japan, Korea, Australia, India, Thailand, Malaysia, Singapore, Philippines, Vietnam, etc.
           - US/CAN: United States and Canada
-          - LATAM: ALL Latin American countries (Mexico, Brazil, Argentina, Chile, Colombia, etc.)
+          - LATAM: ALL Latin American countries (Mexico/VCMX, Brazil/VCBR, Argentina, Chile, Colombia, etc.) - GILA specifically refers to VCMX and VCBR
           - Other: Greater China (China, Taiwan, Hong Kong), Global App, Multi-market, Global Major Accounts
 
           Examples:
-          - "What is the open rate in Europe?" → WHERE c.sub_region = 'EMEA'
-          - "Show me Asia Pacific performance" → WHERE c.sub_region = 'APEC'
-          - "Compare US and Canada vs LATAM" → WHERE c.sub_region IN ('US/CAN', 'LATAM')
-          - "Show Nordics performance" → Use SUB_REGION filter instead
+          - "What is the open rate in Europe?" → WHERE c.region_name_group = 'EMEA'
+          - "Show me Asia Pacific performance" → WHERE c.region_name_group = 'APEC'
+          - "Compare US and Canada vs LATAM" → WHERE c.region_name_group IN ('US/CAN', 'LATAM')
+          - "Show Nordics performance" → Use SALES_AREA filter instead
         expr: REGION_NAME_GROUP
         data_type: VARCHAR(100)
         sample_values:
@@ -486,7 +487,7 @@ tables:
           - USA and Canada: United States, Canada
 
           LATAM Sales Areas:
-          - LATAM NSC: Mexico (VCMX), Brazil (VCBR)
+          - LATAM NSC (also known as GILA): Mexico (VCMX), Brazil (VCBR)
           - LATAM Importers: All other Latin American countries (Argentina, Chile, Colombia, etc.)
 
           Other/Special Sales Areas:
@@ -522,12 +523,13 @@ tables:
           - Global Major Accounts
       - name: SUB_REGION
         synonyms:
-          - region
           - regional_segment
           - sub_region_name
           - subregion
         description: |
-          Mid-level regional grouping - mostly mirrors REGION_NAME_GROUP with slight naming variations.
+          **DO NOT USE THIS FIELD** - Use REGION_NAME_GROUP instead.
+
+          This field is deprecated for queries. Always use REGION_NAME_GROUP as the primary regional field.
 
           Values: APEC, EMEA, USA and Canada, LATAM, Other, Greater China
 
@@ -540,14 +542,14 @@ tables:
           - Other → Other (includes Global, Multi-market, Global Major Accounts)
 
           CRITICAL QUERY RULES:
-          1. **Always include BOTH fields (region_name_group, sub_region) in SELECT** for regional queries
-          2. **Use sub_region as the primary regional filter** for all regional queries
-          3. **Group by both region_name_group and sub_region** in all aggregations
+          1. **DO NOT use sub_region in queries**
+          2. **Always use region_name_group** for all regional filtering and grouping
+          3. **Never include sub_region in SELECT or GROUP BY clauses**
 
           Examples:
-          - "Show EMEA performance" → WHERE c.sub_region = 'EMEA'
-          - "Show all Latin America" → WHERE c.sub_region = 'LATAM' (includes VCMX, VCBR, and all other LATAM countries)
-          - "Show APEC markets" → WHERE c.sub_region = 'APEC'
+          - "Show EMEA performance" → WHERE c.region_name_group = 'EMEA'
+          - "Show all Latin America" → WHERE c.region_name_group = 'LATAM'
+          - "Show APEC markets" → WHERE c.region_name_group = 'APEC'
         expr: SUB_REGION
         data_type: VARCHAR(100)
         sample_values:
@@ -658,7 +660,7 @@ tables:
           - european_region
           - middle_east
         description: Filters for Europe, Middle East, and Africa (EMEA) region markets at the highest level. Use when questions ask about 'Europe', 'European markets', 'EMEA', 'EU performance', 'European region', 'Middle East', 'Africa' as a whole region. For specific sub-regions like Nordics, Central Europe, or Western Europe, use the corresponding sub-region filters instead. Helps analyze performance across the entire EMEA regional grouping.
-        expr: sub_region = 'EMEA'
+        expr: region_name_group = 'EMEA'
       - name: greater_china_subarea
         synonyms:
           - china_region
@@ -2731,8 +2733,7 @@ verified_queries:
           filtered
       )
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         r.business_unit AS market,
         c.country_name AS market_name,
         r.email_name,
@@ -2754,7 +2755,6 @@ verified_queries:
         r.rn = 1
       GROUP BY
         c.region_name_group,
-        c.sub_region,
         r.business_unit,
         c.country_name,
         r.email_name,
@@ -2827,8 +2827,7 @@ verified_queries:
   - name: EX30_NL_VS_BE_COMPARISON
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name AS market_name,
         ROUND(
@@ -2855,7 +2854,6 @@ verified_queries:
         AND UPPER(TRIM(m.car_model)) = 'EX30'
       GROUP BY
         c.region_name_group,
-        c.sub_region,
         f.business_unit,
         c.country_name
       ORDER BY
@@ -2867,8 +2865,7 @@ verified_queries:
   - name: HIGH_OPTOUT_MARKETS
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name AS market_name,
         ROUND(
@@ -2893,7 +2890,6 @@ verified_queries:
         )
       GROUP BY
         c.region_name_group,
-        c.sub_region,
         f.business_unit,
         c.country_name
       HAVING
@@ -2907,8 +2903,7 @@ verified_queries:
   - name: PERFORMANCE_SUMMARY_APAC
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -2921,7 +2916,7 @@ verified_queries:
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group = 'APEC'
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       ORDER BY total_sends DESC
     question: Show me the email performance summary for Asia Pacific region
     verified_at: 1735500000
@@ -2930,8 +2925,7 @@ verified_queries:
   - name: PERFORMANCE_SUMMARY_LATAM
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -2944,7 +2938,7 @@ verified_queries:
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group = 'LATAM'
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       ORDER BY total_sends DESC
     question: Show me the email performance for Latin America
     verified_at: 1735500000
@@ -2953,8 +2947,7 @@ verified_queries:
   - name: PERFORMANCE_SUMMARY_USCAN
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -2968,7 +2961,7 @@ verified_queries:
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group = 'US/CAN'
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       ORDER BY total_sends DESC
     question: Show me the email performance for North America
     verified_at: 1735500000
@@ -2977,8 +2970,7 @@ verified_queries:
   - name: REGIONAL_PERFORMANCE_COMPARISON
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         COUNT(DISTINCT f.business_unit) AS num_markets,
         SUM(f.sends) AS total_sends,
         SUM(f.sends) - SUM(f.bounces) AS total_delivered,
@@ -2990,7 +2982,7 @@ verified_queries:
       LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-      GROUP BY c.region_name_group, c.sub_region
+      GROUP BY c.region_name_group
       ORDER BY total_sends DESC
     question: How do the different regions compare in email performance?
     verified_at: 1735500000
@@ -3210,8 +3202,7 @@ verified_queries:
   - name: BOTTOM_PERFORMING_MARKETS
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -3223,7 +3214,7 @@ verified_queries:
       LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 1000
       ORDER BY click_to_open_rate_pct ASC NULLS LAST
       LIMIT 10
@@ -3234,8 +3225,7 @@ verified_queries:
   - name: BOUNCE_RATE_BY_MARKET
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -3250,7 +3240,7 @@ verified_queries:
       LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 500
       ORDER BY bounce_rate_pct DESC
     question: Which markets have the highest bounce rates?
@@ -3320,8 +3310,7 @@ verified_queries:
   - name: FIRST_YEAR_PROGRAM_PERFORMANCE
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -3335,7 +3324,7 @@ verified_queries:
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'Program'
         AND m.program_names ILIKE '%first-year-program%'
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 100
       ORDER BY click_to_open_rate_pct DESC
     question: How is the First Year Program performing?
@@ -3345,8 +3334,7 @@ verified_queries:
   - name: ORDER_TO_DELIVERY_PROGRAM_PERFORMANCE
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -3360,7 +3348,7 @@ verified_queries:
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'Program'
         AND m.program_names ILIKE '%order-to-delivery%'
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 100
       ORDER BY click_to_open_rate_pct DESC
     question: How is the Order to Delivery program performing?
@@ -3370,8 +3358,7 @@ verified_queries:
   - name: LEAD_NURTURE_PROGRAM_PERFORMANCE
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         SUM(f.sends) AS total_sends,
@@ -3385,7 +3372,7 @@ verified_queries:
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'Program'
         AND (m.program_names ILIKE '%lead-nurture%' OR m.program_names ILIKE '%LNP%')
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 100
       ORDER BY click_to_open_rate_pct DESC
     question: How is the Lead Nurture program performing?
@@ -3395,8 +3382,7 @@ verified_queries:
   - name: ENEWSLETTER_PERFORMANCE_BY_MARKET
     sql: |-
       SELECT
-        c.region_name_group AS parent_region,
-        c.sub_region,
+        c.region_name_group AS region,
         f.business_unit AS market,
         c.country_name,
         COUNT(DISTINCT m.email_name) AS num_newsletters,
@@ -3411,7 +3397,7 @@ verified_queries:
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'E-newsletter'
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 100
       ORDER BY total_sends DESC
     question: How are e-newsletters performing by market?
@@ -3864,8 +3850,7 @@ verified_queries:
     sql: |-
       WITH market_metrics AS (
           SELECT
-              c.region_name_group AS parent_region,
-              c.sub_region,
+              c.region_name_group AS region,
               f.business_unit AS market,
               c.country_name,
               SUM(f.sends) AS total_sends,
@@ -3874,12 +3859,11 @@ verified_queries:
           LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
           LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
           WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-          GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+          GROUP BY c.region_name_group, f.business_unit, c.country_name
           HAVING SUM(f.sends) > 1000
       )
       SELECT
-          mm.parent_region,
-          mm.sub_region,
+          mm.region,
           mm.market,
           mm.country_name,
           mm.total_sends,
@@ -3903,8 +3887,7 @@ verified_queries:
     sql: |-
       WITH market_metrics AS (
           SELECT
-              c.region_name_group AS parent_region,
-              c.sub_region,
+              c.region_name_group AS region,
               f.business_unit AS market,
               c.country_name,
               SUM(f.sends) AS total_sends,
@@ -3913,12 +3896,11 @@ verified_queries:
           LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
           LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
           WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-          GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+          GROUP BY c.region_name_group, f.business_unit, c.country_name
           HAVING SUM(f.sends) > 1000
       )
       SELECT
-          mm.parent_region,
-          mm.sub_region,
+          mm.region,
           mm.market,
           mm.country_name,
           mm.total_sends,
@@ -3940,8 +3922,7 @@ verified_queries:
   - name: REGIONAL_COMPARISON_NO_BENCHMARK
     sql: |-
       SELECT
-          c.region_name_group AS parent_region,
-          c.sub_region,
+          c.region_name_group AS region,
           f.business_unit AS market,
           c.country_name,
           SUM(f.sends) AS total_sends,
@@ -3955,7 +3936,7 @@ verified_queries:
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.business_unit IN ('VCUK', 'VCDE')
-      GROUP BY c.region_name_group, c.sub_region, f.business_unit, c.country_name
+      GROUP BY c.region_name_group, f.business_unit, c.country_name
       ORDER BY ctor_pct DESC
     question: Compare UK vs Germany email performance
     verified_at: 1735500000
@@ -3964,8 +3945,7 @@ verified_queries:
   - name: REGION_COMPARISON_EMEA_VS_APAC
     sql: |-
       SELECT
-          c.region_name_group AS parent_region,
-          c.sub_region,
+          c.region_name_group AS region,
           COUNT(DISTINCT f.business_unit) AS num_markets,
           SUM(f.sends) AS total_sends,
           ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
@@ -3976,7 +3956,7 @@ verified_queries:
       LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group IN ('EMEA', 'APEC')
-      GROUP BY c.region_name_group, c.sub_region
+      GROUP BY c.region_name_group
       ORDER BY ctor_pct DESC
     question: How does EMEA compare to APAC in email performance?
     verified_at: 1735500000
@@ -4468,126 +4448,102 @@ module_custom_instructions:
         ## Regional Hierarchy (CRITICAL RULES)
         V_DIM_COUNTRY provides a 3-level geographic hierarchy:
 
-        **Hierarchy**: REGION_NAME_GROUP (highest) > SUB_REGION (PRIMARY) > COUNTRY_NAME (most granular)
+        **Hierarchy**: REGION_NAME_GROUP (regional level) > COUNTRY_NAME (country level)
 
         ### CRITICAL QUERY RULES FOR REGIONAL QUERIES:
 
-        1. **ALWAYS include BOTH region_name_group AND sub_region in SELECT**
+        1. **ALWAYS use region_name_group as the PRIMARY and ONLY regional field**
            ```sql
            SELECT
-             c.region_name_group,  -- Always include for context
-             c.sub_region,          -- Primary regional field
+             c.region_name_group AS region,  -- Primary regional field
              -- other fields
            ```
 
-        2. **SUB_REGION is the PRIMARY filter field**
-           - When user asks about a region, check if it's in SUB_REGION first
-           - Filter by c.sub_region (not region_name_group) for specific regions
+        2. **DO NOT use sub_region in queries**
+           - Never include c.sub_region in SELECT clauses
+           - Never include c.sub_region in GROUP BY clauses
+           - Never filter by c.sub_region
 
-        3. **Add clarifying note in response**
-           - When filtering by SUB_REGION, tell user: "Note: [region_name] is a sub-region within [parent_region]"
-           - Example: "Note: Greater China is a sub-region within Other"
-
-        4. **GROUP BY both fields for proper context**
+        3. **REGION_NAME_GROUP is the PRIMARY filter field**
            ```sql
-           GROUP BY c.region_name_group, c.sub_region
+           WHERE c.region_name_group = 'EMEA'
+           GROUP BY c.region_name_group
            ```
-
-        ### REGION_NAME_GROUP (Top-level context)
-        Values: EMEA, APEC, US/CAN, LATAM, Other
-
-        Role: Provides CONTEXT and parent region grouping
-        - Include in SELECT for user clarity
-        - Use for GROUP BY to show hierarchy
-        - Only filter by this when user asks for EXPLICIT top-level comparison
 
         Always use INNER JOIN fact table BUSINESS_UNIT to V_DIM_COUNTRY.VC_COUNTRY_CODE for regional queries.
 
-        ### SUB_REGION (PRIMARY regional filter)
-        Mid-level regional grouping - mostly mirrors REGION_NAME_GROUP with slight naming variations.
+        ### REGION_NAME_GROUP (Primary regional field)
+        Values: EMEA, APEC, US/CAN, LATAM, Other
 
-        **Values (only 6 values in SUB_REGION)**:
-        - APEC
-        - EMEA
-        - USA and Canada
-        - LATAM (includes ALL Latin American countries: Mexico, Brazil, Argentina, Chile, Colombia, etc.)
-        - Greater China (China, Taiwan, Hong Kong)
-        - Other (Global, Multi-market, Global Major Accounts)
+        Role: PRIMARY field for all regional filtering and grouping
+        - Include in SELECT as "region"
+        - Use for WHERE clauses to filter regions
+        - Use for GROUP BY for aggregations
 
-        **Mapping to REGION_NAME_GROUP**:
-        - APEC → APEC (same)
-        - EMEA → EMEA (same)
-        - USA and Canada → US/CAN (naming difference)
-        - LATAM → LATAM (scope difference - LATAM region_name_group only inlcudes Mexico and Brazil, while SUB_REGION LATAM includes ALL Latin American countries: Mexico, Brazil, Argentina, Chile, Colombia, etc.)
-        - Greater China → Other (categorization difference)
-        - Other → Other (scope difference - SUB_REGION Other includes Global, Multi-market, Global Major Accounts, while REGION_NAME_GROUP Other includes Greater China, LATAM, Other in SUB_REGION)
+        **Values in REGION_NAME_GROUP**:
+        - EMEA: All European, Middle Eastern, and African markets
+        - APEC: Japan, Korea, Australia, India, Thailand, Malaysia, Singapore, Philippines, Vietnam, etc.
+        - US/CAN: United States and Canada
+        - LATAM: ALL Latin American countries (Mexico, Brazil, Argentina, Chile, Colombia, etc.)
+        - Other: Greater China (China, Taiwan, Hong Kong), Global App, Multi-market, Global Major Accounts
 
-        Role: PRIMARY field for regional filtering
-        - **Default filter field** for regional queries
-        - **Always include in SELECT** with region_name_group
-        - Use when user mentions any of these 6 region names
+        Examples triggering REGION_NAME_GROUP filter:
+        - "Show EMEA performance" → WHERE c.region_name_group = 'EMEA'
+        - "Compare APEC vs LATAM" → WHERE c.region_name_group IN ('APEC', 'LATAM')
+        - "Show USA and Canada" → WHERE c.region_name_group = 'US/CAN'
+        - "Greater China performance" → Use SALES_AREA filter instead, or WHERE c.region_name_group = 'Other'
 
-        Examples triggering SUB_REGION filter:
-        - "Show EMEA performance" → WHERE c.sub_region = 'EMEA'
-        - "Compare APEC vs LATAM" → WHERE c.sub_region IN ('APEC', 'LATAM')
-        - "Show USA and Canada" → WHERE c.sub_region = 'USA and Canada'
-        - "Greater China performance" → WHERE c.sub_region = 'Greater China'
-
-        **Response Pattern When Filtering by SUB_REGION**:
+        **Response Pattern When Filtering by REGION_NAME_GROUP**:
         Always add clarifying note when appropriate:
-        "Note: [sub_region_name] region includes [relevant countries]."
+        "Note: [region_name] region includes [relevant countries]."
 
         Example Response:
         ```
         LATAM Performance:
 
-        | Parent Region | Sub-Region | Click Rate |
-        |---------------|------------|------------|
-        | LATAM         | LATAM      | 3.8%       |
+        | Region | Click Rate |
+        |--------|------------|
+        | LATAM  | 3.8%       |
 
         Note: LATAM includes ALL Latin American countries (Mexico, Brazil, Argentina, Chile, Colombia, etc.).
         ```
 
         ### Region Name Mapping (User Question → Filter Field)
-        When user mentions regional terms, map them to the appropriate filter:
+        When user mentions regional terms, map them to region_name_group:
 
         **For EMEA** (Europe, Middle East, Africa):
         - User says: "Europe", "European", "EU", "EMEA", "Middle East", "Africa"
-        - Filter by: WHERE c.sub_region = 'EMEA'
-        - Note: Use region_name_group = 'EMEA' as alternative
+        - Filter by: WHERE c.region_name_group = 'EMEA'
 
         **For APEC** (Asia Pacific):
         - User says: "Asia", "Asian", "Asia Pacific", "APAC", "Pacific", "APEC"
-        - Filter by: WHERE c.sub_region = 'APEC'
-        - Note: Use region_name_group = 'APEC' as alternative
+        - Filter by: WHERE c.region_name_group = 'APEC'
 
         **For USA and Canada** (North America):
         - User says: "USA", "US", "United States", "America", "Canada", "North America", "NA"
-        - Filter by: WHERE c.sub_region = 'USA and Canada'
-        - Note: Or use region_name_group = 'US/CAN' (different naming)
+        - Filter by: WHERE c.region_name_group = 'US/CAN'
 
         **For LATAM** (Latin America):
-        - User says: "Latin America", "South America", "Central America", "LATAM", "LatAm"
-        - Filter by: WHERE c.sub_region = 'LATAM'
-        - Note: Includes ALL Latin countries (Mexico, Brazil, Argentina, Chile, Colombia, etc.)
+        - User says: "Latin America", "South America", "Central America", "LATAM", "LatAm", "GILA"
+        - Filter by: WHERE c.region_name_group = 'LATAM'
+        - Note: GILA specifically refers to Mexico (VCMX) and Brazil (VCBR) within the LATAM region
 
         **For Greater China**:
         - User says: "Greater China", "China region"
-        - Filter by: WHERE c.sub_region = 'Greater China'
-        - Note: Maps to region_name_group = 'Other'
+        - Filter by: WHERE c.region_name_group = 'Other' OR use SALES_AREA = 'Greater China'
 
         **For Other/Global**:
         - User says: "Other", "Global App", "Multi-market"
-        - Filter by: WHERE c.sub_region = 'Other'
+        - Filter by: WHERE c.region_name_group = 'Other'
 
         **For specific countries** (UK, Germany, France, Japan, etc.):
         - Filter by country_name or business_unit, NOT by region
-        - Always include region_name_group and sub_region in SELECT for context
+        - Always include region_name_group in SELECT for context
 
         **Global / All Regions**:
         - "Global", "Worldwide", "All regions", "All markets"
         - No region filter needed (but ALWAYS exclude sparkpost)
-        - Still include region_name_group and sub_region in SELECT/GROUP BY
+        - Still include region_name_group in SELECT/GROUP BY
         
         ---
         
@@ -4767,17 +4723,16 @@ module_custom_instructions:
         
         ```sql
         -- Regional query template with sparkpost exclusion
-        -- CRITICAL: Always include BOTH regional fields (region_name_group, sub_region)
+        -- CRITICAL: Always use region_name_group as the regional field
         SELECT
-          c.region_name_group AS parent_region,  -- Highest level context
-          c.sub_region,                           -- Primary regional field
+          c.region_name_group AS region,           -- Primary regional field
           ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
           SUM(f.sends) AS total_sends
         FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
         LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
         LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-        GROUP BY c.region_name_group, c.sub_region
+        GROUP BY c.region_name_group
         ORDER BY total_sends DESC
         ```
         

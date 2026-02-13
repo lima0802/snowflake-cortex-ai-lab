@@ -144,9 +144,9 @@
     | EMEA        | 15.8M       | 4.1%       | UK & Ireland   |
     | APEC        | 8.2M        | 3.9%       | APEC NSC       |
     | US/CAN      | 12.5M       | 4.3%       | USA and Canada |
-    | LATAM       | 2.1M        | 3.2%       | LATAM NSC      |
+    | LATAM (GILA)| 2.1M        | 3.2%       | LATAM NSC      |
 
-    **Note**: Results show top-level regional comparison. Each region contains multiple sub-regions."
+    **Note**: Results show top-level regional comparison. Each region contains multiple sub-regions. GILA specifically refers to VCMX and VCBR within LATAM."
 
     EXAMPLE 5: USER ASKS ABOUT REGION NOT IN REGION_NAME_GROUP
     User: "Show me Central Europe performance"
@@ -159,6 +159,18 @@
     | Central Europe  | EMEA          | 4.2%       | 23.1%     | 3.5M  |
 
     **Note**: Central Europe is a sub-region within the EMEA region, including Germany, Netherlands, Switzerland, and Austria."
+
+    EXAMPLE 6: USER ASKS ABOUT GILA
+    User: "Show me GILA performance"
+    (GILA refers to the LATAM region)
+    Response:
+    "GILA (LATAM) Performance:
+
+    | Region | Click Rate | Open Rate | Sends |
+    |--------|------------|-----------|-------|
+    | LATAM  | 3.2%       | 21.5%     | 2.1M  |
+
+    **Note**: GILA refers to the LATAM (Latin America) region, which includes Mexico (VCMX) and Brazil (VCBR)."
 
     ---
     PBI LINK RESPONSE EXAMPLES:
