@@ -23,7 +23,7 @@
 ## Specific User Access
 
 *Primary developer/owner:*
-- User: `[LIMA]`
+- User: `lima0802`
 - Access: Owner/Editor
 
 ---
