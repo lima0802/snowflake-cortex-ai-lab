@@ -1,4 +1,4 @@
-name: V_FACT_SFMC_PERFORMANCE_TRACKING
+name: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
 synonyms:
 - campaign_send_analytics
 - direct_marketing_performance
@@ -15,8 +15,8 @@ description: The table contains records of email marketing campaign performance 
   different business units.
 base_table:
   database: DEV_MARCOM_DB
-  schema: DM
-  table: V_FACT_SFMC_PERFORMANCE_TRACKING
+  schema: AGENT_DIRECTMARKETING
+  table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
 dimensions:
 - name: BUSINESS_UNIT
   synonyms:

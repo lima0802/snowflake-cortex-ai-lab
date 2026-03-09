@@ -1,4 +1,4 @@
-name: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+name: AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
 synonyms:
 - benchmark
 - benchmarks
@@ -18,8 +18,8 @@ description: 'Industry benchmark thresholds for email marketing metrics (2024-20
   Can filter by EMAIL_TYPE: all, triggered, program, campaign, enewsletter, service_reminder.'
 base_table:
   database: DEV_MARCOM_DB
-  schema: APP_DIRECTMARKETING
-  table: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+  schema: AGENT_DIRECTMARKETING
+  table: AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
 dimensions:
 - name: ACTION_REQUIRED
   synonyms:
@@ -42,7 +42,7 @@ dimensions:
   data_type: VARCHAR(500)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - Monitor closely. Consider A/B testing subject lines and improving segmentation.
@@ -64,7 +64,7 @@ dimensions:
   data_type: VARCHAR(100)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - OR_ALL_GOOD
@@ -88,7 +88,7 @@ dimensions:
   data_type: VARCHAR(1000)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - Open rate below 12% is significantly below premium automotive benchmark.
@@ -112,7 +112,7 @@ dimensions:
   data_type: VARCHAR(50)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
 - name: INDUSTRY
   synonyms:
@@ -131,7 +131,7 @@ dimensions:
   data_type: VARCHAR(50)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - premium_automotive
@@ -151,7 +151,7 @@ dimensions:
   data_type: BOOLEAN
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - 'FALSE'
@@ -174,7 +174,7 @@ dimensions:
   data_type: VARCHAR(50)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - ctor
@@ -196,7 +196,7 @@ dimensions:
   data_type: VARCHAR(2000)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - 'Metric: open_rate. Email Type: all. Status: good (Good - Premium Benchmark). Threshold: 15.0000% to 25.0000%. Description:
@@ -226,7 +226,7 @@ dimensions:
   data_type: VARCHAR(20)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - good
@@ -249,7 +249,7 @@ dimensions:
   data_type: VARCHAR(100)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - Good - Premium Benchmark
@@ -272,7 +272,7 @@ dimensions:
   data_type: VARCHAR(20)
   cortex_search_service:
     database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
+    schema: AGENT_DIRECTMARKETING
     service: CORTEX_SFMC_BENCHMARK_SEARCH
   sample_values:
   - 2024-2025

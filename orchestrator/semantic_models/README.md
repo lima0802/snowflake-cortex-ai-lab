@@ -1,7 +1,7 @@
 # Modular Semantic Model Structure
 
-**Model:** SFMC_EMAIL_PERFORMANCE_DEV  
-**Created:** 2026-02-24  
+**Model:** DEV_MARCOM.AGENT_DIRECTMARKETING.SFMC_EMAIL_PERFORMANCE_DEV  
+**Created:** 2026-03-09  
 **Description:** Salesforce Marketing Cloud email campaign performance analytics for Volvo.
 Tracks sends, opens, clicks, bounces, and unsubscribes across business units and markets.
 Primary use cases: campaign performance monitoring, engagement rate analysis, 
@@ -90,5 +90,5 @@ python scripts/deploy_semantic_model.py --stage TEST_SEMANTIC_MODELS
 
 ---
 
-**Last Split:** 2026-02-24 22:58:12  
+**Last Split:** 2026-03-09 17:33:03  
 **Original File:** config\semantic_models\semantic.yaml

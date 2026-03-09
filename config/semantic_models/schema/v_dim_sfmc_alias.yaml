@@ -1,4 +1,4 @@
-name: V_DIM_SFMC_ALIAS
+name: AGENT_V_DIM_SFMC_ALIAS
 synonyms:
 - content_block_references
 - email_blocks
@@ -14,8 +14,8 @@ description: The table contains records of email content blocks used in marketin
   specific block within an email and includes details about the block's type, position, and associated link tracking information.
 base_table:
   database: DEV_MARCOM_DB
-  schema: DM
-  table: V_DIM_SFMC_ALIAS
+  schema: AGENT_DIRECTMARKETING
+  table: AGENT_V_DIM_SFMC_ALIAS
 dimensions:
 - name: ALIAS
   synonyms:

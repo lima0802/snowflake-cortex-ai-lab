@@ -1,4 +1,4 @@
-name: V_DIM_COUNTRY
+name: AGENT_V_DIM_COUNTRY
 synonyms:
 - country_dimension
 - country_lookup
@@ -15,8 +15,8 @@ description: The table contains records of countries with their associated geogr
   reporting and analysis.
 base_table:
   database: DEV_MARCOM_DB
-  schema: DM
-  table: V_DIM_COUNTRY
+  schema: AGENT_DIRECTMARKETING
+  table: AGENT_V_DIM_COUNTRY
 dimensions:
 - name: COUNTRY_CODE
   synonyms:

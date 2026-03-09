@@ -1,4 +1,4 @@
-name: V_DIM_SFMC_METADATA_JOB
+name: AGENT_V_DIM_SFMC_METADATA_JOB
 synonyms:
 - campaign_metadata_view
 - email_campaign_metadata
@@ -15,8 +15,8 @@ description: The table contains records of email marketing campaigns and their a
   and geographic region, and compliance tracking.
 base_table:
   database: DEV_MARCOM_DB
-  schema: DM
-  table: V_DIM_SFMC_METADATA_JOB
+  schema: AGENT_DIRECTMARKETING
+  table: AGENT_V_DIM_SFMC_METADATA_JOB
 dimensions:
 - name: AB_TESTING
   synonyms:
