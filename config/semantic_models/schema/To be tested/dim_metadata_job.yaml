@@ -1,0 +1,172 @@
+# =============================================================================
+# Table: AGENT_V_DIM_SFMC_METADATA_JOB
+# Role: dimension
+# Campaign metadata — descriptive attributes for each email send job.
+# ALWAYS apply sparkpost exclusion when joining this table.
+# =============================================================================
+
+table: AGENT_V_DIM_SFMC_METADATA_JOB
+role: dimension
+description: >
+  Campaign metadata dimension. Provides all descriptive attributes for each email send job.
+  ALWAYS apply sparkpost exclusion when joining this table.
+  Use LEFT JOIN unless filtering by campaign attributes (then INNER JOIN is acceptable).
+
+join_to:
+  fact_table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
+  join_type: LEFT (INNER when filtering on campaign attributes)
+  join_condition: "LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key"
+  notes: "Always add: WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)"
+
+columns:
+  dimensions:
+    COMP_KEY:
+      description: "Composite key joining metadata to fact performance records."
+      synonyms: [composite_key, job_key]
+    EMAIL_NAME:
+      description: >
+        The unique identifier for each email campaign or program send.
+        Use ILIKE '%keyword%' for fuzzy matching. NEVER match sparkpost names.
+      synonyms: [campaign_name, email_campaign_name, email_identifier, email_label]
+    BUSINESS_UNIT:
+      description: "Market identifier following 'VC' + country code pattern (e.g., VCUK, VCDE)."
+      synonyms: [bu, market, market_code]
+    SEND_ID:
+      description: "SFMC send job identifier."
+    EMAIL_SUBJECT_LINE:
+      description: "The email subject line as displayed to recipients."
+      synonyms: [email_subject, subject, subject_line]
+    CAR_MODEL:
+      description: >
+        Volvo car model featured in the email (e.g., EX30, XC90, EX90).
+        NEVER include in queries unless the user explicitly asks about a specific model.
+      synonyms: [model, vehicle_model]
+    CAR_MODEL_FORMAT:
+      description: >
+        Standardized display format of car model names for reporting (e.g., EX30 CC, XC60 MY26 Refresh).
+        Cleaner version of CAR_MODEL — use this for grouping and display when a model is requested.
+      expr: >
+        CASE
+          WHEN DASHBOARD_CAR_MODEL = 'EX30 CROSS COUNTRY' THEN 'EX30 CC'
+          WHEN DASHBOARD_CAR_MODEL = 'XC60' THEN 'XC60 MY26 Refresh'
+          ELSE DASHBOARD_CAR_MODEL
+        END
+      synonyms: [car_model_type, model_classification, model_format, vehicle_format]
+    PROGRAM_OR_COMPAIGN:
+      description: >
+        Email type classification. Intentional typo in source column (COMPAIGN not CAMPAIGN) — do not correct.
+        Values: 'Campaign', 'Program', 'E-newsletter'.
+      values:
+        Campaign:
+          description: "One-time campaign emails — fixed sends (new model launches, promotions)."
+          user_phrases: ["campaign", "campaigns", "eDM", "EDM", "global campaign"]
+          filter_note: "Apply when user says 'campaigns' generically. For specific campaign names, use email_name ILIKE instead."
+        Program:
+          description: "Automated lifecycle emails identified by CPROG prefix (order-to-delivery, first-year, lead-nurture)."
+          user_phrases: ["program", "automated", "lifecycle", "automated email", "triggered"]
+        "E-newsletter":
+          description: "Monthly newsletters — not sent in all markets; identified by CENEWS in email_name."
+          user_phrases: ["newsletter", "enewsletter", "eNews", "global eNewsletter"]
+    PROGRAM_NAMES:
+      description: >
+        Pipe-separated list of program identifiers (e.g., 'first-year-program|lead-nurture').
+        Use ILIKE with program slug patterns for filtering specific programs.
+      synonyms: [program_list, programs]
+    EMAIL_SOURCE:
+      description: "Where the email template was created."
+      values: [Catalyst, SFMC]
+    EMAIL_SEND_PROCESS:
+      description: "How the email was triggered."
+      values: [Direct Engine, Outside Direct Engine]
+    GEOGRAPHIC_SCOPE:
+      description: "Whether the email was sent centrally (by HQ) or locally (by a market team)."
+      values: [Central, Local]
+    EMAIL_LANGUAGE:
+      description: "Language code of the email content (e.g., en, fr, de, es)."
+      synonyms: [language, locale]
+    EMAIL_VERSION:
+      description: "Version identifier for AB test variants or localized versions."
+      synonyms: [version]
+    AB_TESTING:
+      description: "Flag indicating whether this send was part of an AB test."
+      values: ["Y", "N"]
+      synonyms: [ab_test, ab_test_flag, split_test]
+    COMPLIANT:
+      description: "Whether the email meets compliance standards."
+      values: ["Y", "N", null]
+    SEND_TYPE:
+      description: "Delivery mechanism classification."
+    COMMUNICATION_CATEGORY:
+      description: "High-level category of the communication."
+    SEND_DATE:
+      description: "Date the email job was sent."
+    DASHBOARD_CAR_MODEL:
+      description: "Car model label formatted for dashboard display."
+    CATALYST_TYPE:
+      description: "Catalyst platform template type."
+    CATALYST_COUNTRY_CODE:
+      description: "Country code as recorded in Catalyst."
+    EMAIL_SEND_NUMBER:
+      description: "Sequential send number within a program (e.g., 1st, 2nd, 3rd send)."
+
+  computed_metrics:
+    UNIQUE_CAMPAIGN_COUNT:
+      expr: "COUNT(DISTINCT EMAIL_NAME)"
+      description: "Number of distinct email campaigns. Use for questions about campaign count or variety."
+      synonyms: [campaign_count_unique, campaign_distinct_count, distinct_campaign_count, total_unique_campaigns]
+
+filters:
+  campaign_type:
+    sql: "m.program_or_compaign = 'Campaign'"
+    trigger: ["campaign", "campaigns", "eDM", "EDM", "global campaign"]
+  program_type:
+    sql: "m.program_or_compaign = 'Program'"
+    trigger: ["program", "programs", "automated", "lifecycle", "triggered"]
+  enewsletter_type:
+    sql: "m.program_or_compaign = 'E-newsletter'"
+    trigger: ["newsletter", "enewsletter", "eNews", "newsmail"]
+  direct_engine:
+    sql: "m.email_send_process = 'Direct Engine'"
+    trigger: ["direct engine", "Catalyst", "DE", "catalyst emails", "briefed"]
+  outside_direct_engine:
+    sql: "m.email_send_process = 'Outside Direct Engine'"
+    trigger: ["outside direct engine", "ODE", "non-Catalyst", "SFMC direct", "manual"]
+  catalyst_source:
+    sql: "m.email_source = 'Catalyst'"
+    trigger: ["Catalyst source", "Catalyst created"]
+  sfmc_source:
+    sql: "m.email_source = 'SFMC'"
+    trigger: ["SFMC source", "SFMC created", "non-Catalyst"]
+  central_scope:
+    sql: "m.geographic_scope = 'Central'"
+    trigger: ["central", "global", "HQ", "centrally managed", "global campaigns"]
+  local_scope:
+    sql: "m.geographic_scope = 'Local'"
+    trigger: ["local", "market-specific", "local team", "local campaigns"]
+  first_year_program:
+    sql: "m.program_names ILIKE '%first-year-program%' AND m.program_or_compaign = 'Program'"
+    trigger: ["first year program", "FYP"]
+  lead_nurture_program:
+    sql: "(m.program_names ILIKE '%lead-nurture%' OR m.program_names ILIKE '%LNP%') AND m.program_or_compaign = 'Program'"
+    trigger: ["lead nurture", "LNP"]
+  order_to_delivery_program:
+    sql: "m.program_names ILIKE '%order-to-delivery%' AND m.program_or_compaign = 'Program'"
+    trigger: ["order to delivery", "O2D", "OTD"]
+  renew_program:
+    sql: "m.email_name ILIKE '%cprog_renew_%' AND m.email_name NOT ILIKE '%test%' AND m.program_or_compaign = 'Program'"
+    trigger: ["renew", "renewal"]
+  service_reminder_program:
+    sql: "m.program_names ILIKE '%service-reminder%' AND m.program_or_compaign = 'Program'"
+    trigger: ["service reminder"]
+  volvo_cars_app_program:
+    sql: "m.program_names ILIKE '%volvo-cars-app%' AND m.program_or_compaign = 'Program'"
+    trigger: ["volvo app", "cars app"]
+  ab_test_emails:
+    sql: "m.ab_testing = 'Y'"
+    trigger: ["AB test", "split test", "A/B testing"]
+  compliant_emails:
+    sql: "m.compliant = 'Y'"
+    trigger: ["compliant", "compliance"]
+  non_compliant_emails:
+    sql: "m.compliant = 'N'"
+    trigger: ["non-compliant", "non compliant"]
