@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python scripts/split_semantic_model.py --input config/semantic_models/semantic.yaml --output-dir orchestrator/semantic_models)",
+      "Bash(python scripts/split_semantic_model.py)",
+      "Bash(python scripts/promote_semantic_to_prod.py)",
+      "Bash(git add config/semantic_models/ scripts/promote_semantic_to_prod.py scripts/split_semantic_model.py config/agents/backup/agent_spec.yaml config/agent_spec.yaml config/agents/backup/semantic_template.yaml config/semantic.yaml config/semantic_backup.yaml config/semantic_prod.yaml)"
+    ]
+  }
+}

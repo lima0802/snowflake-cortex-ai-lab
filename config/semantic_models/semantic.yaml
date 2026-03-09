@@ -1,4 +1,4 @@
-name: SFMC_EMAIL_PERFORMANCE_DEV
+name: DEV_MARCOM.AGENT_DIRECTMARKETING.SFMC_EMAIL_PERFORMANCE_DEV
 description: |
   Salesforce Marketing Cloud email campaign performance analytics for Volvo.
   Tracks sends, opens, clicks, bounces, and unsubscribes across business units and markets.
@@ -26,8 +26,8 @@ tables:
       Can filter by EMAIL_TYPE: all, triggered, program, campaign, enewsletter, service_reminder.
     base_table:
       database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      table: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
     dimensions:
       - name: ACTION_REQUIRED
         synonyms:
@@ -49,7 +49,7 @@ tables:
         data_type: VARCHAR(500)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - Monitor closely. Consider A/B testing subject lines and improving segmentation.
@@ -70,7 +70,7 @@ tables:
         data_type: VARCHAR(100)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - OR_ALL_GOOD
@@ -93,7 +93,7 @@ tables:
         data_type: VARCHAR(1000)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - Open rate below 12% is significantly below premium automotive benchmark.
@@ -116,7 +116,7 @@ tables:
         data_type: VARCHAR(50)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
       - name: INDUSTRY
         synonyms:
@@ -134,7 +134,7 @@ tables:
         data_type: VARCHAR(50)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - premium_automotive
@@ -153,7 +153,7 @@ tables:
         data_type: BOOLEAN
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - 'FALSE'
@@ -175,7 +175,7 @@ tables:
         data_type: VARCHAR(50)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - ctor
@@ -196,7 +196,7 @@ tables:
         data_type: VARCHAR(2000)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - 'Metric: open_rate. Email Type: all. Status: good (Good - Premium Benchmark). Threshold: 15.0000% to 25.0000%. Description: Open rate 15-25% meets premium automotive benchmark. This is the Volvo target range. Action: Maintain current practices. Continue optimization efforts. Industry: premium_automotive Period: 2024-2025'
@@ -219,7 +219,7 @@ tables:
         data_type: VARCHAR(20)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - good
@@ -241,7 +241,7 @@ tables:
         data_type: VARCHAR(100)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - Good - Premium Benchmark
@@ -263,7 +263,7 @@ tables:
         data_type: VARCHAR(20)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - 2024-2025
@@ -345,8 +345,8 @@ tables:
     description: The table contains records of countries with their associated geographic and business classifications. Each record represents a single country and includes regional groupings, sales territories, and market designations used for organizational reporting and analysis.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_DIM_COUNTRY
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_DIM_COUNTRY
     dimensions:
       - name: COUNTRY_CODE
         synonyms:
@@ -547,9 +547,10 @@ tables:
           3. **Never include sub_region in SELECT or GROUP BY clauses**
 
           Examples:
-          - "Show EMEA performance" → WHERE c.region_name_group = 'EMEA'
-          - "Show all Latin America" → WHERE c.region_name_group = 'LATAM'
-          - "Show APEC markets" → WHERE c.region_name_group = 'APEC'
+          "Show EMEA performance" → WHERE c.region_name_group = 'EMEA'
+          "Show all Latin America" → WHERE c.region_name_group = 'LATAM'
+          "Show APEC markets" → WHERE c.region_name_group = 'APEC'
+
         expr: SUB_REGION
         data_type: VARCHAR(100)
         sample_values:
@@ -558,7 +559,7 @@ tables:
           - Greater China
           - LATAM
           - Other
-          - USA and Canada    
+          - USA and Canada
       - name: VC_COUNTRY_CODE
         synonyms:
           - bu_code
@@ -777,8 +778,8 @@ tables:
     description: The table contains records of email content blocks used in marketing communications. Each record represents a specific block within an email and includes details about the block's type, position, and associated link tracking information.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_DIM_SFMC_ALIAS
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_DIM_SFMC_ALIAS
     dimensions:
       - name: ALIAS
         synonyms:
@@ -890,8 +891,8 @@ tables:
     description: The table contains records of email marketing campaigns and their associated metadata. Each record represents a single email send and includes details about the campaign configuration, target audience segmentation by vehicle model and geographic region, and compliance tracking.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_DIM_SFMC_METADATA_JOB
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_DIM_SFMC_METADATA_JOB
     dimensions:
       - name: AB_TESTING
         synonyms:
@@ -1541,8 +1542,8 @@ tables:
     description: The table contains records of email marketing block performance metrics. Each record represents a specific email block's performance within individual email campaigns, including click engagement data and timing information.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_FACT_SFMC_PERFORMANCE_BLOCK
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
     dimensions:
       - name: ALIAS
         synonyms:
@@ -1655,8 +1656,8 @@ tables:
     description: The table contains records of email marketing campaign performance metrics. Each record represents engagement data for individual email sends, including delivery statistics, recipient interactions, and unsubscribe activity across different business units.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_FACT_SFMC_PERFORMANCE_TRACKING
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
     dimensions:
       - name: BUSINESS_UNIT
         synonyms:
@@ -2624,34 +2625,34 @@ tables:
         - COMP_KEY
 relationships:
   - name: BLOCK_FACT_TO_ALIAS
-    left_table: V_FACT_SFMC_PERFORMANCE_BLOCK
-    right_table: V_DIM_SFMC_ALIAS
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
+    right_table: AGENT_V_DIM_SFMC_ALIAS
     relationship_columns:
       - left_column: ALIAS
         right_column: ALIAS
   - name: BLOCK_FACT_TO_CAMPAIGN_METADATA
-    left_table: V_FACT_SFMC_PERFORMANCE_BLOCK
-    right_table: V_DIM_SFMC_METADATA_JOB
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
+    right_table: AGENT_V_DIM_SFMC_METADATA_JOB
     relationship_columns:
       - left_column: COMP_KEY
         right_column: COMP_KEY
   - name: BLOCK_FACT_TO_COUNTRY
-    left_table: V_FACT_SFMC_PERFORMANCE_BLOCK
-    right_table: V_DIM_COUNTRY
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
+    right_table: AGENT_V_DIM_COUNTRY
     relationship_columns:
       - left_column: BUSINESS_UNIT
         right_column: VC_COUNTRY_CODE
   - name: EMAIL_FACT_TO_CAMPAIGN_METADATA
-    left_table: V_FACT_SFMC_PERFORMANCE_TRACKING
-    right_table: V_DIM_SFMC_METADATA_JOB
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
+    right_table: AGENT_V_DIM_SFMC_METADATA_JOB
     relationship_columns:
       - left_column: COMP_KEY
         right_column: COMP_KEY
     relationship_type: many_to_one
     join_type: left_outer
   - name: EMAIL_FACT_TO_COUNTRY
-    left_table: V_FACT_SFMC_PERFORMANCE_TRACKING
-    right_table: V_DIM_COUNTRY
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
+    right_table: AGENT_V_DIM_COUNTRY
     relationship_columns:
       - left_column: BUSINESS_UNIT
         right_column: VC_COUNTRY_CODE
@@ -2700,7 +2701,7 @@ verified_queries:
     question: Which campaign achieved the highest engagement in Q3?
     verified_at: 1770917310
     verified_by: Li Ma
-    use_as_onboarding_question: true 
+    use_as_onboarding_question: true
   - name: MARKET_COMPARISON_FR_ES_IT
     sql: |-
       WITH filtered AS (
@@ -3249,22 +3250,58 @@ verified_queries:
     use_as_onboarding_question: false
   - name: SPAIN_OPTOUT_VS_EU_LAST_QUARTER
     sql: |-
-      SELECT 
-        ROUND(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.unsubscribes END) * 100.0 / 
-              NULLIF(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.sends END), 0), 2) AS spain_unsubscribe_rate_pct,
-        ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS eu_avg_unsubscribe_rate_pct,
-        ROUND(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.unsubscribes END) * 100.0 / 
-              NULLIF(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.sends END), 0), 2) - 
-        ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS difference_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
-      WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
+      SELECT
+        ROUND(
+          SUM(
+            CASE
+              WHEN f.business_unit = 'VCES' THEN f.unsubscribes
+            END
+          ) * 100.0 / NULLIF(
+            SUM(
+              CASE
+                WHEN f.business_unit = 'VCES' THEN f.sends
+              END
+            ),
+            0
+          ),
+          2
+        ) AS spain_unsubscribe_rate_pct,
+        ROUND(
+          SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+          2
+        ) AS eu_avg_unsubscribe_rate_pct,
+        ROUND(
+          SUM(
+            CASE
+              WHEN f.business_unit = 'VCES' THEN f.unsubscribes
+            END
+          ) * 100.0 / NULLIF(
+            SUM(
+              CASE
+                WHEN f.business_unit = 'VCES' THEN f.sends
+              END
+            ),
+            0
+          ),
+          2
+        ) - ROUND(
+          SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+          2
+        ) AS difference_pct
+      FROM
+        V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      WHERE
+        (
+          m.email_name NOT ILIKE '%sparkpost%'
+          OR m.email_name IS NULL
+        )
         AND c.region_name_group = 'EMEA'
         AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -1, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
     question: What is Spain's opt-out rate compared to the EU average in last quarter?
-    verified_at: 1735500000
+    verified_at: 1770990899
     verified_by: Li Ma
     use_as_onboarding_question: false
   - name: CLICK_RATE_VCUK_MONTHLY
@@ -3505,28 +3542,47 @@ verified_queries:
     use_as_onboarding_question: false
   - name: D2C_VS_TRADITIONAL_MARKET_PERFORMANCE
     sql: |-
-      SELECT 
-        CASE 
+      SELECT
+        CASE
           WHEN f.business_unit = 'VCUK' THEN 'D2C (UK)'
           ELSE 'Traditional Markets'
         END AS market_type,
         COUNT(DISTINCT f.business_unit) AS num_markets,
         SUM(f.sends) AS total_sends,
         SUM(f.sends) - SUM(f.bounces) AS total_delivered,
-        ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
-        ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
-        ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
-        ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-      GROUP BY CASE 
+        ROUND(
+          SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS open_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS click_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0),
+          1
+        ) AS click_to_open_rate_pct,
+        ROUND(
+          SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+          2
+        ) AS unsubscribe_rate_pct
+      FROM
+        V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      WHERE
+        (
+          m.email_name NOT ILIKE '%sparkpost%'
+          OR m.email_name IS NULL
+        )
+      GROUP BY
+        CASE
           WHEN f.business_unit = 'VCUK' THEN 'D2C (UK)'
           ELSE 'Traditional Markets'
         END
-      ORDER BY total_sends DESC
+      ORDER BY
+        total_sends DESC
     question: How does UK (D2C market) compare to traditional markets?
-    verified_at: 1735500000
+    verified_at: 1770990878
     verified_by: Li Ma
     use_as_onboarding_question: false
   - name: AB_TEST_CAMPAIGN_PERFORMANCE
@@ -3945,21 +4001,37 @@ verified_queries:
   - name: REGION_COMPARISON_EMEA_VS_APAC
     sql: |-
       SELECT
-          c.region_name_group AS region,
-          COUNT(DISTINCT f.business_unit) AS num_markets,
-          SUM(f.sends) AS total_sends,
-          ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
-          ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
-          ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
-      WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
+        c.region_name_group AS region,
+        COUNT(DISTINCT f.business_unit) AS num_markets,
+        SUM(f.sends) AS total_sends,
+        ROUND(
+          SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS open_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS click_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0),
+          1
+        ) AS ctor_pct
+      FROM
+        V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      WHERE
+        (
+          m.email_name NOT ILIKE '%sparkpost%'
+          OR m.email_name IS NULL
+        )
         AND c.region_name_group IN ('EMEA', 'APEC')
-      GROUP BY c.region_name_group
-      ORDER BY ctor_pct DESC
+      GROUP BY
+        c.region_name_group
+      ORDER BY
+        ctor_pct DESC
     question: How does EMEA compare to APAC in email performance?
-    verified_at: 1735500000
+    verified_at: 1770990920
     verified_by: Li Ma
     use_as_onboarding_question: false
   - name: HISTORICAL_COMPARISON_MOM
