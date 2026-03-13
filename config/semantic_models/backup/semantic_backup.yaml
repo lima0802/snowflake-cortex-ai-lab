@@ -1,4 +1,4 @@
-name: SFMC_EMAIL_PERFORMANCE_DEV
+name: DEV_MARCOM.AGENT_DIRECTMARKETING.SFMC_EMAIL_PERFORMANCE_DEV
 description: |
   Salesforce Marketing Cloud email campaign performance analytics for Volvo.
   Tracks sends, opens, clicks, bounces, and unsubscribes across business units and markets.
@@ -8,7 +8,7 @@ description: |
   Business Units: VCUK (UK), VCDE (Germany), VCFR (France), VCES (Spain), 
   VCIT (Italy), VCNL (Netherlands), VCBE (Belgium), and others.
 tables:
-  - name: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+  - name: AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
     synonyms:
       - benchmark
       - benchmarks
@@ -26,8 +26,8 @@ tables:
       Can filter by EMAIL_TYPE: all, triggered, program, campaign, enewsletter, service_reminder.
     base_table:
       database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      table: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
     dimensions:
       - name: ACTION_REQUIRED
         synonyms:
@@ -49,7 +49,7 @@ tables:
         data_type: VARCHAR(500)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - Monitor closely. Consider A/B testing subject lines and improving segmentation.
@@ -70,7 +70,7 @@ tables:
         data_type: VARCHAR(100)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - OR_ALL_GOOD
@@ -93,7 +93,7 @@ tables:
         data_type: VARCHAR(1000)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - Open rate below 12% is significantly below premium automotive benchmark.
@@ -116,7 +116,7 @@ tables:
         data_type: VARCHAR(50)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
       - name: INDUSTRY
         synonyms:
@@ -134,7 +134,7 @@ tables:
         data_type: VARCHAR(50)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - premium_automotive
@@ -153,7 +153,7 @@ tables:
         data_type: BOOLEAN
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - 'FALSE'
@@ -175,7 +175,7 @@ tables:
         data_type: VARCHAR(50)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - ctor
@@ -196,7 +196,7 @@ tables:
         data_type: VARCHAR(2000)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - 'Metric: open_rate. Email Type: all. Status: good (Good - Premium Benchmark). Threshold: 15.0000% to 25.0000%. Description: Open rate 15-25% meets premium automotive benchmark. This is the Volvo target range. Action: Maintain current practices. Continue optimization efforts. Industry: premium_automotive Period: 2024-2025'
@@ -219,7 +219,7 @@ tables:
         data_type: VARCHAR(20)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - good
@@ -241,7 +241,7 @@ tables:
         data_type: VARCHAR(100)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - Good - Premium Benchmark
@@ -263,7 +263,7 @@ tables:
         data_type: VARCHAR(20)
         cortex_search_service:
           database: DEV_MARCOM_DB
-          schema: APP_DIRECTMARKETING
+          schema: AGENT_DIRECTMARKETING
           service: CORTEX_SFMC_BENCHMARK_SEARCH
         sample_values:
           - 2024-2025
@@ -330,7 +330,7 @@ tables:
     primary_key:
       columns:
         - BENCHMARK_ID
-  - name: V_DIM_COUNTRY
+  - name: AGENT_V_DIM_COUNTRY
     synonyms:
       - country_dimension
       - country_lookup
@@ -345,8 +345,8 @@ tables:
     description: The table contains records of countries with their associated geographic and business classifications. Each record represents a single country and includes regional groupings, sales territories, and market designations used for organizational reporting and analysis.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_DIM_COUNTRY
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_DIM_COUNTRY
     dimensions:
       - name: COUNTRY_CODE
         synonyms:
@@ -547,9 +547,10 @@ tables:
           3. **Never include sub_region in SELECT or GROUP BY clauses**
 
           Examples:
-          - "Show EMEA performance" → WHERE c.region_name_group = 'EMEA'
-          - "Show all Latin America" → WHERE c.region_name_group = 'LATAM'
-          - "Show APEC markets" → WHERE c.region_name_group = 'APEC'
+          "Show EMEA performance" → WHERE c.region_name_group = 'EMEA'
+          "Show all Latin America" → WHERE c.region_name_group = 'LATAM'
+          "Show APEC markets" → WHERE c.region_name_group = 'APEC'
+
         expr: SUB_REGION
         data_type: VARCHAR(100)
         sample_values:
@@ -558,7 +559,7 @@ tables:
           - Greater China
           - LATAM
           - Other
-          - USA and Canada    
+          - USA and Canada
       - name: VC_COUNTRY_CODE
         synonyms:
           - bu_code
@@ -777,8 +778,8 @@ tables:
     description: The table contains records of email content blocks used in marketing communications. Each record represents a specific block within an email and includes details about the block's type, position, and associated link tracking information.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_DIM_SFMC_ALIAS
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_DIM_SFMC_ALIAS
     dimensions:
       - name: ALIAS
         synonyms:
@@ -875,7 +876,7 @@ tables:
     primary_key:
       columns:
         - ALIAS
-  - name: V_DIM_SFMC_METADATA_JOB
+  - name: AGENT_V_DIM_SFMC_METADATA_JOB
     synonyms:
       - campaign_metadata_view
       - email_campaign_metadata
@@ -890,8 +891,8 @@ tables:
     description: The table contains records of email marketing campaigns and their associated metadata. Each record represents a single email send and includes details about the campaign configuration, target audience segmentation by vehicle model and geographic region, and compliance tracking.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_DIM_SFMC_METADATA_JOB
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_DIM_SFMC_METADATA_JOB
     dimensions:
       - name: AB_TESTING
         synonyms:
@@ -1541,8 +1542,8 @@ tables:
     description: The table contains records of email marketing block performance metrics. Each record represents a specific email block's performance within individual email campaigns, including click engagement data and timing information.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_FACT_SFMC_PERFORMANCE_BLOCK
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
     dimensions:
       - name: ALIAS
         synonyms:
@@ -1640,7 +1641,7 @@ tables:
           - '79'
           - '610'
           - '2069'
-  - name: V_FACT_SFMC_PERFORMANCE_TRACKING
+  - name: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
     synonyms:
       - campaign_send_analytics
       - direct_marketing_performance
@@ -1655,8 +1656,8 @@ tables:
     description: The table contains records of email marketing campaign performance metrics. Each record represents engagement data for individual email sends, including delivery statistics, recipient interactions, and unsubscribe activity across different business units.
     base_table:
       database: DEV_MARCOM_DB
-      schema: DM
-      table: V_FACT_SFMC_PERFORMANCE_TRACKING
+      schema: AGENT_DIRECTMARKETING
+      table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
     dimensions:
       - name: BUSINESS_UNIT
         synonyms:
@@ -1690,7 +1691,7 @@ tables:
           - unique_key
         description: |
           The composite key combining SEND_ID and BUSINESS_UNIT.
-          This is the join key to V_DIM_SFMC_METADATA_JOB.COMP_KEY.
+          This is the join key to AGENT_V_DIM_SFMC_METADATA_JOB.COMP_KEY.
           Example: '2149529VCFI'
         expr: COMP_KEY
         data_type: VARCHAR(134217728)
@@ -2624,34 +2625,34 @@ tables:
         - COMP_KEY
 relationships:
   - name: BLOCK_FACT_TO_ALIAS
-    left_table: V_FACT_SFMC_PERFORMANCE_BLOCK
-    right_table: V_DIM_SFMC_ALIAS
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
+    right_table: AGENT_V_DIM_SFMC_ALIAS
     relationship_columns:
       - left_column: ALIAS
         right_column: ALIAS
   - name: BLOCK_FACT_TO_CAMPAIGN_METADATA
-    left_table: V_FACT_SFMC_PERFORMANCE_BLOCK
-    right_table: V_DIM_SFMC_METADATA_JOB
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
+    right_table: AGENT_V_DIM_SFMC_METADATA_JOB
     relationship_columns:
       - left_column: COMP_KEY
         right_column: COMP_KEY
   - name: BLOCK_FACT_TO_COUNTRY
-    left_table: V_FACT_SFMC_PERFORMANCE_BLOCK
-    right_table: V_DIM_COUNTRY
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
+    right_table: AGENT_V_DIM_COUNTRY
     relationship_columns:
       - left_column: BUSINESS_UNIT
         right_column: VC_COUNTRY_CODE
   - name: EMAIL_FACT_TO_CAMPAIGN_METADATA
-    left_table: V_FACT_SFMC_PERFORMANCE_TRACKING
-    right_table: V_DIM_SFMC_METADATA_JOB
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
+    right_table: AGENT_V_DIM_SFMC_METADATA_JOB
     relationship_columns:
       - left_column: COMP_KEY
         right_column: COMP_KEY
     relationship_type: many_to_one
     join_type: left_outer
   - name: EMAIL_FACT_TO_COUNTRY
-    left_table: V_FACT_SFMC_PERFORMANCE_TRACKING
-    right_table: V_DIM_COUNTRY
+    left_table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
+    right_table: AGENT_V_DIM_COUNTRY
     relationship_columns:
       - left_column: BUSINESS_UNIT
         right_column: VC_COUNTRY_CODE
@@ -2678,8 +2679,8 @@ verified_queries:
           1
         ) AS click_to_open_rate_pct
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE
         (
           m.email_name NOT ILIKE '%sparkpost%'
@@ -2700,7 +2701,7 @@ verified_queries:
     question: Which campaign achieved the highest engagement in Q3?
     verified_at: 1770917310
     verified_by: Li Ma
-    use_as_onboarding_question: true 
+    use_as_onboarding_question: true
   - name: MARKET_COMPARISON_FR_ES_IT
     sql: |-
       WITH filtered AS (
@@ -2714,8 +2715,8 @@ verified_queries:
           f.bounces,
           m.email_name
         FROM
-          V_FACT_SFMC_PERFORMANCE_TRACKING f
-          INNER JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          INNER JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
         WHERE
           m.email_name NOT ILIKE '%sparkpost%'
           AND f.business_unit IN ('VCFR', 'VCES', 'VCIT')
@@ -2750,7 +2751,7 @@ verified_queries:
         SUM(r.sends) - SUM(r.bounces) AS total_delivered
       FROM
         ranked r
-        INNER JOIN V_DIM_COUNTRY c ON r.business_unit = c.vc_country_code
+        INNER JOIN AGENT_V_DIM_COUNTRY c ON r.business_unit = c.vc_country_code
       WHERE
         r.rn = 1
       GROUP BY
@@ -2776,9 +2777,9 @@ verified_queries:
           ) AS unsubscribe_rate_pct,
           SUM(f.sends) AS total_sends
         FROM
-          V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-          INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+          AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE
           (
             m.email_name NOT ILIKE '%sparkpost%'
@@ -2799,9 +2800,9 @@ verified_queries:
           ) AS unsubscribe_rate_pct,
           SUM(f.sends) AS total_sends
         FROM
-          V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-          INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+          AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE
           (
             m.email_name NOT ILIKE '%sparkpost%'
@@ -2841,9 +2842,9 @@ verified_queries:
         SUM(f.sends) AS total_sends,
         SUM(f.sends) - SUM(f.bounces) AS total_delivered
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE
         (
           m.email_name NOT ILIKE '%sparkpost%'
@@ -2880,9 +2881,9 @@ verified_queries:
           ELSE 'OK'
         END AS status
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE
         (
           m.email_name NOT ILIKE '%sparkpost%'
@@ -2911,9 +2912,9 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group = 'APEC'
       GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -2933,9 +2934,9 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group = 'LATAM'
       GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -2956,9 +2957,9 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND c.region_name_group = 'US/CAN'
       GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -2978,9 +2979,9 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY c.region_name_group
       ORDER BY total_sends DESC
@@ -2999,8 +3000,8 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.bounces) * 100.0 / NULLIF(SUM(f.sends), 0), 1) AS bounce_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -12, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -3021,8 +3022,8 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.bounces) * 100.0 / NULLIF(SUM(f.sends), 0), 1) AS bounce_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -8, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
@@ -3046,8 +3047,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('WEEK', DATEADD('WEEK', -2, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('WEEK', CURRENT_DATE)
@@ -3074,8 +3075,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -1, CURRENT_DATE))
       GROUP BY CASE 
@@ -3097,8 +3098,8 @@ verified_queries:
         ROUND(AVG(f.sends), 0) AS avg_sends_per_day,
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
       GROUP BY DAYNAME(f.send_date), DAYOFWEEKISO(f.send_date)
@@ -3117,8 +3118,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct, 
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct, 
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct 
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f 
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key 
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f 
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key 
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -1, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
@@ -3140,8 +3141,8 @@ verified_queries:
         SUM(f.unique_clicks) AS total_unique_clicks, 
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct, 
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct 
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f 
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key 
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f 
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key 
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -1, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -3165,8 +3166,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.email_name, m.car_model, m.program_or_compaign
       HAVING SUM(f.sends) > 500
@@ -3189,8 +3190,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATEADD('DAY', -30, CURRENT_DATE)
       GROUP BY m.email_name, m.car_model
@@ -3210,9 +3211,9 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 1000
@@ -3236,9 +3237,9 @@ verified_queries:
           WHEN SUM(f.bounces) * 100.0 / NULLIF(SUM(f.sends), 0) > 2 THEN 'Warning - Monitor'
           ELSE 'Healthy'
         END AS status
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY c.region_name_group, f.business_unit, c.country_name
       HAVING SUM(f.sends) > 500
@@ -3249,22 +3250,58 @@ verified_queries:
     use_as_onboarding_question: false
   - name: SPAIN_OPTOUT_VS_EU_LAST_QUARTER
     sql: |-
-      SELECT 
-        ROUND(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.unsubscribes END) * 100.0 / 
-              NULLIF(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.sends END), 0), 2) AS spain_unsubscribe_rate_pct,
-        ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS eu_avg_unsubscribe_rate_pct,
-        ROUND(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.unsubscribes END) * 100.0 / 
-              NULLIF(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.sends END), 0), 2) - 
-        ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS difference_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
-      WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
+      SELECT
+        ROUND(
+          SUM(
+            CASE
+              WHEN f.business_unit = 'VCES' THEN f.unsubscribes
+            END
+          ) * 100.0 / NULLIF(
+            SUM(
+              CASE
+                WHEN f.business_unit = 'VCES' THEN f.sends
+              END
+            ),
+            0
+          ),
+          2
+        ) AS spain_unsubscribe_rate_pct,
+        ROUND(
+          SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+          2
+        ) AS eu_avg_unsubscribe_rate_pct,
+        ROUND(
+          SUM(
+            CASE
+              WHEN f.business_unit = 'VCES' THEN f.unsubscribes
+            END
+          ) * 100.0 / NULLIF(
+            SUM(
+              CASE
+                WHEN f.business_unit = 'VCES' THEN f.sends
+              END
+            ),
+            0
+          ),
+          2
+        ) - ROUND(
+          SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+          2
+        ) AS difference_pct
+      FROM
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      WHERE
+        (
+          m.email_name NOT ILIKE '%sparkpost%'
+          OR m.email_name IS NULL
+        )
         AND c.region_name_group = 'EMEA'
         AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -1, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
     question: What is Spain's opt-out rate compared to the EU average in last quarter?
-    verified_at: 1735500000
+    verified_at: 1770990899
     verified_by: Li Ma
     use_as_onboarding_question: false
   - name: CLICK_RATE_VCUK_MONTHLY
@@ -3275,8 +3312,8 @@ verified_queries:
         SUM(f.sends) AS total_sends,
         SUM(f.sends) - SUM(f.bounces) AS total_delivered,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.business_unit = 'VCUK'
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
@@ -3298,8 +3335,8 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.program_or_compaign
       ORDER BY total_sends DESC
@@ -3318,9 +3355,9 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'Program'
         AND m.program_names ILIKE '%first-year-program%'
@@ -3342,9 +3379,9 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'Program'
         AND m.program_names ILIKE '%order-to-delivery%'
@@ -3366,9 +3403,9 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'Program'
         AND (m.program_names ILIKE '%lead-nurture%' OR m.program_names ILIKE '%LNP%')
@@ -3392,9 +3429,9 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND m.program_or_compaign = 'E-newsletter'
       GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -3415,8 +3452,8 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.email_send_process
       ORDER BY total_sends DESC
@@ -3434,8 +3471,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.email_source
       ORDER BY total_sends DESC
@@ -3454,8 +3491,8 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.geographic_scope
       ORDER BY total_sends DESC
@@ -3473,8 +3510,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY COALESCE(UPPER(TRIM(m.car_model)), 'Not Specified')
       HAVING SUM(f.sends) > 100
@@ -3493,8 +3530,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.email_language
       HAVING SUM(f.sends) > 100
@@ -3505,28 +3542,47 @@ verified_queries:
     use_as_onboarding_question: false
   - name: D2C_VS_TRADITIONAL_MARKET_PERFORMANCE
     sql: |-
-      SELECT 
-        CASE 
+      SELECT
+        CASE
           WHEN f.business_unit = 'VCUK' THEN 'D2C (UK)'
           ELSE 'Traditional Markets'
         END AS market_type,
         COUNT(DISTINCT f.business_unit) AS num_markets,
         SUM(f.sends) AS total_sends,
         SUM(f.sends) - SUM(f.bounces) AS total_delivered,
-        ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
-        ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
-        ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
-        ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-      GROUP BY CASE 
+        ROUND(
+          SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS open_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS click_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0),
+          1
+        ) AS click_to_open_rate_pct,
+        ROUND(
+          SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+          2
+        ) AS unsubscribe_rate_pct
+      FROM
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      WHERE
+        (
+          m.email_name NOT ILIKE '%sparkpost%'
+          OR m.email_name IS NULL
+        )
+      GROUP BY
+        CASE
           WHEN f.business_unit = 'VCUK' THEN 'D2C (UK)'
           ELSE 'Traditional Markets'
         END
-      ORDER BY total_sends DESC
+      ORDER BY
+        total_sends DESC
     question: How does UK (D2C market) compare to traditional markets?
-    verified_at: 1735500000
+    verified_at: 1770990878
     verified_by: Li Ma
     use_as_onboarding_question: false
   - name: AB_TEST_CAMPAIGN_PERFORMANCE
@@ -3539,8 +3595,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY CASE WHEN m.ab_testing IS NOT NULL THEN 'AB Test' ELSE 'Non-AB Test' END
       ORDER BY total_sends DESC
@@ -3558,8 +3614,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.email_send_number
       HAVING SUM(f.sends) > 100
@@ -3578,8 +3634,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       GROUP BY m.compliant
       ORDER BY total_sends DESC
@@ -3597,8 +3653,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
       GROUP BY CASE WHEN DAYOFWEEKISO(f.send_date) IN (6, 7) THEN 'Weekend' ELSE 'Weekday' END
@@ -3616,7 +3672,7 @@ verified_queries:
         sub_region,
         region_name_group,
         market_cd
-      FROM V_DIM_COUNTRY
+      FROM AGENT_V_DIM_COUNTRY
       ORDER BY region_name_group, sub_region, country_name
     question: What countries and regions are available in our email marketing database?
     verified_at: 1735500000
@@ -3639,7 +3695,7 @@ verified_queries:
         email_language,
         email_version,
         send_date
-      FROM V_DIM_SFMC_METADATA_JOB
+      FROM AGENT_V_DIM_SFMC_METADATA_JOB
       WHERE email_name NOT ILIKE '%sparkpost%'
       ORDER BY send_date DESC
       LIMIT 1000
@@ -3659,7 +3715,7 @@ verified_queries:
           END AS threshold_range,
           DESCRIPTION,
           ACTION_REQUIRED
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE METRIC_NAME = 'ctor'
         AND EMAIL_TYPE = 'all'
         AND STATUS != 'info'
@@ -3687,7 +3743,7 @@ verified_queries:
           END AS threshold_range,
           DESCRIPTION,
           ACTION_REQUIRED
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE METRIC_NAME = 'open_rate'
         AND EMAIL_TYPE = 'all'
         AND STATUS != 'info'
@@ -3715,7 +3771,7 @@ verified_queries:
           END AS threshold_range,
           DESCRIPTION,
           ACTION_REQUIRED
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE METRIC_NAME = 'click_rate'
         AND EMAIL_TYPE = 'all'
         AND STATUS != 'info'
@@ -3743,7 +3799,7 @@ verified_queries:
           END AS threshold_range,
           DESCRIPTION,
           ACTION_REQUIRED
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE METRIC_NAME = 'optout_rate'
         AND EMAIL_TYPE = 'all'
         AND STATUS != 'info'
@@ -3771,7 +3827,7 @@ verified_queries:
           END AS threshold_range,
           DESCRIPTION,
           ACTION_REQUIRED
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE METRIC_NAME = 'bounce_rate'
         AND EMAIL_TYPE = 'all'
         AND STATUS != 'info'
@@ -3802,7 +3858,7 @@ verified_queries:
           MAX(CASE WHEN STATUS = 'excellent' THEN 
               CASE WHEN IS_INVERSE THEN '<' || MAX_VALUE || '%' ELSE '>' || MIN_VALUE || '%' END 
           END) AS excellent_threshold
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE EMAIL_TYPE = 'all' 
         AND STATUS != 'info'
       GROUP BY METRIC_NAME
@@ -3817,7 +3873,7 @@ verified_queries:
           METRIC_NAME,
           MIN_VALUE || '% - ' || MAX_VALUE || '%' AS expected_range,
           DESCRIPTION
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE EMAIL_TYPE = 'program'
         AND STATUS = 'good'
       ORDER BY 
@@ -3837,7 +3893,7 @@ verified_queries:
           MAX(CASE WHEN METRIC_NAME = 'open_rate' THEN MIN_VALUE || '% - ' || MAX_VALUE || '%' END) AS open_rate_range,
           MAX(CASE WHEN METRIC_NAME = 'click_rate' THEN MIN_VALUE || '% - ' || MAX_VALUE || '%' END) AS ctr_range,
           MAX(CASE WHEN METRIC_NAME = 'ctor' THEN MIN_VALUE || '% - ' || MAX_VALUE || '%' END) AS ctor_range
-      FROM CORTEX_SFMC_BENCHMARK_THRESHOLDS
+      FROM AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS
       WHERE STATUS = 'good' 
         AND EMAIL_TYPE != 'all'
       GROUP BY EMAIL_TYPE
@@ -3855,9 +3911,9 @@ verified_queries:
               c.country_name,
               SUM(f.sends) AS total_sends,
               ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-          FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-          LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+          FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
           WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
           GROUP BY c.region_name_group, f.business_unit, c.country_name
           HAVING SUM(f.sends) > 1000
@@ -3872,7 +3928,7 @@ verified_queries:
           b.STATUS_LABEL,
           b.ACTION_REQUIRED
       FROM market_metrics mm
-      INNER JOIN CORTEX_SFMC_BENCHMARK_THRESHOLDS b
+      INNER JOIN AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS b
           ON b.METRIC_NAME = 'ctor'
           AND b.EMAIL_TYPE = 'all'
           AND b.STATUS IN ('critical', 'warning')
@@ -3892,9 +3948,9 @@ verified_queries:
               c.country_name,
               SUM(f.sends) AS total_sends,
               ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-          FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-          LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+          FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
           WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
           GROUP BY c.region_name_group, f.business_unit, c.country_name
           HAVING SUM(f.sends) > 1000
@@ -3908,7 +3964,7 @@ verified_queries:
           b.STATUS AS benchmark_status,
           b.STATUS_LABEL
       FROM market_metrics mm
-      LEFT JOIN CORTEX_SFMC_BENCHMARK_THRESHOLDS b
+      LEFT JOIN AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS b
           ON b.METRIC_NAME = 'ctor'
           AND b.EMAIL_TYPE = 'all'
           AND b.STATUS != 'info'
@@ -3931,9 +3987,9 @@ verified_queries:
           ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
           ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct,
           ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS optout_rate_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.business_unit IN ('VCUK', 'VCDE')
       GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -3945,21 +4001,37 @@ verified_queries:
   - name: REGION_COMPARISON_EMEA_VS_APAC
     sql: |-
       SELECT
-          c.region_name_group AS region,
-          COUNT(DISTINCT f.business_unit) AS num_markets,
-          SUM(f.sends) AS total_sends,
-          ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
-          ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
-          ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-      LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
-      WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
+        c.region_name_group AS region,
+        COUNT(DISTINCT f.business_unit) AS num_markets,
+        SUM(f.sends) AS total_sends,
+        ROUND(
+          SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS open_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+          1
+        ) AS click_rate_pct,
+        ROUND(
+          SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0),
+          1
+        ) AS ctor_pct
+      FROM
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      WHERE
+        (
+          m.email_name NOT ILIKE '%sparkpost%'
+          OR m.email_name IS NULL
+        )
         AND c.region_name_group IN ('EMEA', 'APEC')
-      GROUP BY c.region_name_group
-      ORDER BY ctor_pct DESC
+      GROUP BY
+        c.region_name_group
+      ORDER BY
+        ctor_pct DESC
     question: How does EMEA compare to APAC in email performance?
-    verified_at: 1735500000
+    verified_at: 1770990920
     verified_by: Li Ma
     use_as_onboarding_question: false
   - name: HISTORICAL_COMPARISON_MOM
@@ -3974,8 +4046,8 @@ verified_queries:
           ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
           ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
           ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -1, CURRENT_DATE))
       GROUP BY CASE 
@@ -3998,8 +4070,8 @@ verified_queries:
           ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) - 
               LAG(ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1)) 
               OVER (ORDER BY DATE_TRUNC('MONTH', f.send_date)) AS change_pct
-      FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
         AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -4021,9 +4093,9 @@ verified_queries:
             1
           ) AS ctor_pct
         FROM
-          V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-          LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+          AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE
           (
             m.email_name NOT ILIKE '%sparkpost%'
@@ -4321,7 +4393,7 @@ module_custom_instructions:
         
         ## BENCHMARK RULES (CRITICAL - READ CAREFULLY)
         
-        ### USE CORTEX_SFMC_BENCHMARK_THRESHOLDS table ONLY when:
+        ### USE AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS table ONLY when:
         - User says "industry benchmark" (BOTH words together)
         - User says "industry standard" or "industry average"
         - User asks "what is a good [metric]?" or "is this good or bad?"
@@ -4378,8 +4450,8 @@ module_custom_instructions:
         
         Standard pattern (use in EVERY query):
         ```sql
-        FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         ```
         
@@ -4440,13 +4512,13 @@ module_custom_instructions:
         - "non-D2C", "dealer markets" → WHERE f.business_unit != 'VCUK'
         
         ## Business Unit / Country Level Groupings
-        Use V_DIM_COUNTRY table to get COUNTRY_NAME.
-        Always use INNER JOIN fact table BUSINESS_UNIT to V_DIM_COUNTRY.VC_COUNTRY_CODE for business unit/country/market level queries.
+        Use AGENT_V_DIM_COUNTRY table to get COUNTRY_NAME.
+        Always use INNER JOIN fact table BUSINESS_UNIT to AGENT_V_DIM_COUNTRY.VC_COUNTRY_CODE for business unit/country/market level queries.
 
         ---
 
         ## Regional Hierarchy (CRITICAL RULES)
-        V_DIM_COUNTRY provides a 3-level geographic hierarchy:
+        AGENT_V_DIM_COUNTRY provides a 3-level geographic hierarchy:
 
         **Hierarchy**: REGION_NAME_GROUP (regional level) > COUNTRY_NAME (country level)
 
@@ -4470,7 +4542,7 @@ module_custom_instructions:
            GROUP BY c.region_name_group
            ```
 
-        Always use INNER JOIN fact table BUSINESS_UNIT to V_DIM_COUNTRY.VC_COUNTRY_CODE for regional queries.
+        Always use INNER JOIN fact table BUSINESS_UNIT to AGENT_V_DIM_COUNTRY.VC_COUNTRY_CODE for regional queries.
 
         ### REGION_NAME_GROUP (Primary regional field)
         Values: EMEA, APEC, US/CAN, LATAM, Other
@@ -4716,8 +4788,8 @@ module_custom_instructions:
           ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct,
           SUM(f.sends) AS total_sends,
           SUM(f.sends) - SUM(f.bounces) AS total_delivered
-        FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         ```
         
@@ -4728,9 +4800,9 @@ module_custom_instructions:
           c.region_name_group AS region,           -- Primary regional field
           ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
           SUM(f.sends) AS total_sends
-        FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-        LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         GROUP BY c.region_name_group
         ORDER BY total_sends DESC
@@ -4742,8 +4814,8 @@ module_custom_instructions:
           DATE_TRUNC('MONTH', f.send_date) AS month,
           ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
           SUM(f.sends) AS total_sends
-        FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
           AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
           AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -4851,8 +4923,8 @@ module_custom_instructions:
         -- Current YTD
         WITH current_ytd AS (
           SELECT SUM(unique_clicks) * 100.0 / NULLIF(SUM(sends) - SUM(bounces), 0) AS click_rate
-          FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
           WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
             AND send_date >= DATE_TRUNC('YEAR', CURRENT_DATE)
             AND send_date < CURRENT_DATE
@@ -4860,8 +4932,8 @@ module_custom_instructions:
         -- Same period last year
         last_year_same_period AS (
           SELECT SUM(unique_clicks) * 100.0 / NULLIF(SUM(sends) - SUM(bounces), 0) AS click_rate
-          FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-          LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+          FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+          LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
           WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
             AND send_date >= DATEADD('YEAR', -1, DATE_TRUNC('YEAR', CURRENT_DATE))
             AND send_date < DATEADD('YEAR', -1, CURRENT_DATE)
@@ -4878,11 +4950,11 @@ module_custom_instructions:
         
         ---
         
-        ## Cortex Search Benchmark Integration (CORTEX_SFMC_BENCHMARK_THRESHOLDS Table)
+        ## Cortex Search Benchmark Integration (AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS Table)
         
         ### CRITICAL: "INDUSTRY BENCHMARK" Rule
         
-        ONLY query CORTEX_SFMC_BENCHMARK_THRESHOLDS when user explicitly says:
+        ONLY query AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS when user explicitly says:
         - "industry benchmark" (BOTH words together)
         - "industry standard"
         - "industry average"
@@ -4895,8 +4967,8 @@ module_custom_instructions:
         
         | User Says | Use Industry Table? | Action |
         |-----------|--------------------:|--------|
-        | "industry benchmark" | YES | Query CORTEX_SFMC_BENCHMARK_THRESHOLDS |
-        | "industry standard" | YES | Query CORTEX_SFMC_BENCHMARK_THRESHOLDS |
+        | "industry benchmark" | YES | Query AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS |
+        | "industry standard" | YES | Query AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS |
         | "what's a good click rate" | YES | Return industry threshold |
         | "benchmark" (alone) | NO | Internal comparison |
         | "benchmark vs last year" | NO | YoY from fact table |
@@ -4982,7 +5054,7 @@ module_custom_instructions:
         - Use LEFT JOIN when joining to metadata to preserve all fact records
         - Filter out small sample sizes (e.g., HAVING SUM(sends) > 100) for meaningful rates
         - Add country_name translations for better readability when comparing markets
-        -  **CRITICAL**: For regional queries, ALWAYS include BOTH fields (region_name_group, sub_region) in SELECT. SUB_REGION is the primary field for regional filtering and analysis. Use V_DIM_COUNTRY table to get COUNTRY_NAME, SUB_REGION (middle), and REGION_NAME_GROUP (highest). Always INNER JOIN fact table BUSINESS_UNIT to V_DIM_COUNTRY.VC_COUNTRY_CODE for business unit/country/market/region level queries.
+        -  **CRITICAL**: For regional queries, ALWAYS include BOTH fields (region_name_group, sub_region) in SELECT. SUB_REGION is the primary field for regional filtering and analysis. Use AGENT_V_DIM_COUNTRY table to get COUNTRY_NAME, SUB_REGION (middle), and REGION_NAME_GROUP (highest). Always INNER JOIN fact table BUSINESS_UNIT to AGENT_V_DIM_COUNTRY.VC_COUNTRY_CODE for business unit/country/market/region level queries.
         - Use CR as primary engagement metric (more reliable than open rate)
         - NEVER include dimension fields car_model,catalyst_type,catalyst_country_code,email_send_number,email_version,email_language,ab_testing,program_names,dashboard_car_model,email_send_process,email_source,program_or_compaign,compliant,send_type,geographic_scope,communication_category unless they are directly required for the query logic or explicitly requested by the user.
         
@@ -5002,7 +5074,7 @@ module_custom_instructions:
         2. Always subtract bounces from sends to calculate delivered emails when computing open rates and click rates
         3. Use click rate (unique clicks/delivered) as the primary engagement metric
         4. When displaying open rate or click-to-open rate, inform the users that these metrics are unreliable.
-        5. Do NOT include dimension fields from V_DIM_SFMC_METADATA_JOB from  unless they are directly required for the query logic or explicitly requested by the user.
+        5. Do NOT include dimension fields from AGENT_V_DIM_SFMC_METADATA_JOB from  unless they are directly required for the query logic or explicitly requested by the user.
         
         **For campaign performance or conversion rate questions:**
         1. ALWAYS exclude sparkpost campaigns
@@ -5014,11 +5086,11 @@ module_custom_instructions:
         **For market performance questions:**
         1. ALWAYS exclude sparkpost campaigns
         2. Use the business_unit field as the market identifier
-        3. Join with V_DIM_COUNTRY and ALWAYS include country_name, sub_region (primary), and region_name_group (context) in SELECT
+        3. Join with AGENT_V_DIM_COUNTRY and ALWAYS include country_name, sub_region (primary), and region_name_group (context) in SELECT
         4. Only flag benchmark status if user asks about "industry benchmark" explicitly
         
         **For benchmark-related questions:**
-        1. Only query CORTEX_SFMC_BENCHMARK_THRESHOLDS when user says "industry benchmark" (both words)
+        1. Only query AGENT_CORTEX_SFMC_BENCHMARK_THRESHOLDS when user says "industry benchmark" (both words)
         2. "benchmark" alone means internal comparison (YoY, regional, market-to-market)
         3. CR is the primary engagement metric
         4. Consider email type when comparing to benchmarks (programs vs campaigns vs newsletters)

@@ -19,8 +19,8 @@ verified_queries:
         1
       ) AS click_to_open_rate_pct
     FROM
-      V_FACT_SFMC_PERFORMANCE_TRACKING f
-      LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE
       (
         m.email_name NOT ILIKE '%sparkpost%'
@@ -55,8 +55,8 @@ verified_queries:
         f.bounces,
         m.email_name
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-        INNER JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        INNER JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
       WHERE
         m.email_name NOT ILIKE '%sparkpost%'
         AND f.business_unit IN ('VCFR', 'VCES', 'VCIT')
@@ -91,7 +91,7 @@ verified_queries:
       SUM(r.sends) - SUM(r.bounces) AS total_delivered
     FROM
       ranked r
-      INNER JOIN V_DIM_COUNTRY c ON r.business_unit = c.vc_country_code
+      INNER JOIN AGENT_V_DIM_COUNTRY c ON r.business_unit = c.vc_country_code
     WHERE
       r.rn = 1
     GROUP BY
@@ -117,9 +117,9 @@ verified_queries:
         ) AS unsubscribe_rate_pct,
         SUM(f.sends) AS total_sends
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-        INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE
         (
           m.email_name NOT ILIKE '%sparkpost%'
@@ -140,9 +140,9 @@ verified_queries:
         ) AS unsubscribe_rate_pct,
         SUM(f.sends) AS total_sends
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-        INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE
         (
           m.email_name NOT ILIKE '%sparkpost%'
@@ -182,9 +182,9 @@ verified_queries:
       SUM(f.sends) AS total_sends,
       SUM(f.sends) - SUM(f.bounces) AS total_delivered
     FROM
-      V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE
       (
         m.email_name NOT ILIKE '%sparkpost%'
@@ -221,9 +221,9 @@ verified_queries:
         ELSE 'OK'
       END AS status
     FROM
-      V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    INNER JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+      AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    INNER JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE
       (
         m.email_name NOT ILIKE '%sparkpost%'
@@ -252,9 +252,9 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND c.region_name_group = 'APEC'
     GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -274,9 +274,9 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND c.region_name_group = 'LATAM'
     GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -297,9 +297,9 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND c.region_name_group = 'US/CAN'
     GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -319,9 +319,9 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY c.region_name_group
     ORDER BY total_sends DESC
@@ -340,8 +340,8 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.bounces) * 100.0 / NULLIF(SUM(f.sends), 0), 1) AS bounce_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -12, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -362,8 +362,8 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.bounces) * 100.0 / NULLIF(SUM(f.sends), 0), 1) AS bounce_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -8, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
@@ -387,8 +387,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('WEEK', DATEADD('WEEK', -2, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('WEEK', CURRENT_DATE)
@@ -415,8 +415,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -1, CURRENT_DATE))
     GROUP BY CASE
@@ -438,8 +438,8 @@ verified_queries:
       ROUND(AVG(f.sends), 0) AS avg_sends_per_day,
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
     GROUP BY DAYNAME(f.send_date), DAYOFWEEKISO(f.send_date)
@@ -458,8 +458,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -1, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
@@ -481,8 +481,8 @@ verified_queries:
       SUM(f.unique_clicks) AS total_unique_clicks,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -1, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -506,8 +506,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.email_name, m.car_model, m.program_or_compaign
     HAVING SUM(f.sends) > 500
@@ -530,8 +530,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATEADD('DAY', -30, CURRENT_DATE)
     GROUP BY m.email_name, m.car_model
@@ -551,9 +551,9 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY c.region_name_group, f.business_unit, c.country_name
     HAVING SUM(f.sends) > 1000
@@ -577,9 +577,9 @@ verified_queries:
         WHEN SUM(f.bounces) * 100.0 / NULLIF(SUM(f.sends), 0) > 2 THEN 'Warning - Monitor'
         ELSE 'Healthy'
       END AS status
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY c.region_name_group, f.business_unit, c.country_name
     HAVING SUM(f.sends) > 500
@@ -591,21 +591,57 @@ verified_queries:
 - name: SPAIN_OPTOUT_VS_EU_LAST_QUARTER
   sql: |
     SELECT
-      ROUND(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.unsubscribes END) * 100.0 /
-            NULLIF(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.sends END), 0), 2) AS spain_unsubscribe_rate_pct,
-      ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS eu_avg_unsubscribe_rate_pct,
-      ROUND(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.unsubscribes END) * 100.0 /
-            NULLIF(SUM(CASE WHEN f.business_unit = 'VCES' THEN f.sends END), 0), 2) -
-      ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS difference_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
-    WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
+      ROUND(
+        SUM(
+          CASE
+            WHEN f.business_unit = 'VCES' THEN f.unsubscribes
+          END
+        ) * 100.0 / NULLIF(
+          SUM(
+            CASE
+              WHEN f.business_unit = 'VCES' THEN f.sends
+            END
+          ),
+          0
+        ),
+        2
+      ) AS spain_unsubscribe_rate_pct,
+      ROUND(
+        SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+        2
+      ) AS eu_avg_unsubscribe_rate_pct,
+      ROUND(
+        SUM(
+          CASE
+            WHEN f.business_unit = 'VCES' THEN f.unsubscribes
+          END
+        ) * 100.0 / NULLIF(
+          SUM(
+            CASE
+              WHEN f.business_unit = 'VCES' THEN f.sends
+            END
+          ),
+          0
+        ),
+        2
+      ) - ROUND(
+        SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+        2
+      ) AS difference_pct
+    FROM
+      AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    WHERE
+      (
+        m.email_name NOT ILIKE '%sparkpost%'
+        OR m.email_name IS NULL
+      )
       AND c.region_name_group = 'EMEA'
       AND f.send_date >= DATE_TRUNC('QUARTER', DATEADD('QUARTER', -1, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('QUARTER', CURRENT_DATE)
   question: What is Spain's opt-out rate compared to the EU average in last quarter?
-  verified_at: 1735500000
+  verified_at: 1770990899
   verified_by: Li Ma
   use_as_onboarding_question: false
 - name: CLICK_RATE_VCUK_MONTHLY
@@ -616,8 +652,8 @@ verified_queries:
       SUM(f.sends) AS total_sends,
       SUM(f.sends) - SUM(f.bounces) AS total_delivered,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.business_unit = 'VCUK'
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
@@ -639,8 +675,8 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.program_or_compaign
     ORDER BY total_sends DESC
@@ -659,9 +695,9 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND m.program_or_compaign = 'Program'
       AND m.program_names ILIKE '%first-year-program%'
@@ -683,9 +719,9 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND m.program_or_compaign = 'Program'
       AND m.program_names ILIKE '%order-to-delivery%'
@@ -707,9 +743,9 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND m.program_or_compaign = 'Program'
       AND (m.program_names ILIKE '%lead-nurture%' OR m.program_names ILIKE '%LNP%')
@@ -733,9 +769,9 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND m.program_or_compaign = 'E-newsletter'
     GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -756,8 +792,8 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.email_send_process
     ORDER BY total_sends DESC
@@ -775,8 +811,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.email_source
     ORDER BY total_sends DESC
@@ -795,8 +831,8 @@ verified_queries:
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
       ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.geographic_scope
     ORDER BY total_sends DESC
@@ -814,8 +850,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY COALESCE(UPPER(TRIM(m.car_model)), 'Not Specified')
     HAVING SUM(f.sends) > 100
@@ -834,8 +870,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.email_language
     HAVING SUM(f.sends) > 100
@@ -854,20 +890,39 @@ verified_queries:
       COUNT(DISTINCT f.business_unit) AS num_markets,
       SUM(f.sends) AS total_sends,
       SUM(f.sends) - SUM(f.bounces) AS total_delivered,
-      ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
-      ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
-      ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct,
-      ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS unsubscribe_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
-    GROUP BY CASE
+      ROUND(
+        SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+        1
+      ) AS open_rate_pct,
+      ROUND(
+        SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+        1
+      ) AS click_rate_pct,
+      ROUND(
+        SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0),
+        1
+      ) AS click_to_open_rate_pct,
+      ROUND(
+        SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0),
+        2
+      ) AS unsubscribe_rate_pct
+    FROM
+      AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    WHERE
+      (
+        m.email_name NOT ILIKE '%sparkpost%'
+        OR m.email_name IS NULL
+      )
+    GROUP BY
+      CASE
         WHEN f.business_unit = 'VCUK' THEN 'D2C (UK)'
         ELSE 'Traditional Markets'
       END
-    ORDER BY total_sends DESC
+    ORDER BY
+      total_sends DESC
   question: How does UK (D2C market) compare to traditional markets?
-  verified_at: 1735500000
+  verified_at: 1770990878
   verified_by: Li Ma
   use_as_onboarding_question: false
 - name: AB_TEST_CAMPAIGN_PERFORMANCE
@@ -880,8 +935,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY CASE WHEN m.ab_testing IS NOT NULL THEN 'AB Test' ELSE 'Non-AB Test' END
     ORDER BY total_sends DESC
@@ -899,8 +954,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.email_send_number
     HAVING SUM(f.sends) > 100
@@ -919,8 +974,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
     GROUP BY m.compliant
     ORDER BY total_sends DESC
@@ -938,8 +993,8 @@ verified_queries:
       ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
       ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS click_to_open_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
     GROUP BY CASE WHEN DAYOFWEEKISO(f.send_date) IN (6, 7) THEN 'Weekend' ELSE 'Weekday' END
@@ -957,7 +1012,7 @@ verified_queries:
       sub_region,
       region_name_group,
       market_cd
-    FROM V_DIM_COUNTRY
+    FROM AGENT_V_DIM_COUNTRY
     ORDER BY region_name_group, sub_region, country_name
   question: What countries and regions are available in our email marketing database?
   verified_at: 1735500000
@@ -980,7 +1035,7 @@ verified_queries:
       email_language,
       email_version,
       send_date
-    FROM V_DIM_SFMC_METADATA_JOB
+    FROM AGENT_V_DIM_SFMC_METADATA_JOB
     WHERE email_name NOT ILIKE '%sparkpost%'
     ORDER BY send_date DESC
     LIMIT 1000
@@ -1196,9 +1251,9 @@ verified_queries:
             c.country_name,
             SUM(f.sends) AS total_sends,
             ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-        FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-        LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         GROUP BY c.region_name_group, f.business_unit, c.country_name
         HAVING SUM(f.sends) > 1000
@@ -1233,9 +1288,9 @@ verified_queries:
             c.country_name,
             SUM(f.sends) AS total_sends,
             ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-        FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-        LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
         WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
         GROUP BY c.region_name_group, f.business_unit, c.country_name
         HAVING SUM(f.sends) > 1000
@@ -1272,9 +1327,9 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct,
         ROUND(SUM(f.unsubscribes) * 100.0 / NULLIF(SUM(f.sends), 0), 2) AS optout_rate_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.business_unit IN ('VCUK', 'VCDE')
     GROUP BY c.region_name_group, f.business_unit, c.country_name
@@ -1286,21 +1341,37 @@ verified_queries:
 - name: REGION_COMPARISON_EMEA_VS_APAC
   sql: |
     SELECT
-        c.region_name_group AS region,
-        COUNT(DISTINCT f.business_unit) AS num_markets,
-        SUM(f.sends) AS total_sends,
-        ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
-        ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
-        ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-    LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
-    WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
+      c.region_name_group AS region,
+      COUNT(DISTINCT f.business_unit) AS num_markets,
+      SUM(f.sends) AS total_sends,
+      ROUND(
+        SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+        1
+      ) AS open_rate_pct,
+      ROUND(
+        SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0),
+        1
+      ) AS click_rate_pct,
+      ROUND(
+        SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0),
+        1
+      ) AS ctor_pct
+    FROM
+      AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+      LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+      LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+    WHERE
+      (
+        m.email_name NOT ILIKE '%sparkpost%'
+        OR m.email_name IS NULL
+      )
       AND c.region_name_group IN ('EMEA', 'APEC')
-    GROUP BY c.region_name_group
-    ORDER BY ctor_pct DESC
+    GROUP BY
+      c.region_name_group
+    ORDER BY
+      ctor_pct DESC
   question: How does EMEA compare to APAC in email performance?
-  verified_at: 1735500000
+  verified_at: 1770990920
   verified_by: Li Ma
   use_as_onboarding_question: false
 - name: HISTORICAL_COMPARISON_MOM
@@ -1315,8 +1386,8 @@ verified_queries:
         ROUND(SUM(f.unique_opens) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS open_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.sends) - SUM(f.bounces), 0), 1) AS click_rate_pct,
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) AS ctor_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -1, CURRENT_DATE))
     GROUP BY CASE
@@ -1339,8 +1410,8 @@ verified_queries:
         ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1) -
             LAG(ROUND(SUM(f.unique_clicks) * 100.0 / NULLIF(SUM(f.unique_opens), 0), 1))
             OVER (ORDER BY DATE_TRUNC('MONTH', f.send_date)) AS change_pct
-    FROM V_FACT_SFMC_PERFORMANCE_TRACKING f
-    LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+    FROM AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+    LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
     WHERE (m.email_name NOT ILIKE '%sparkpost%' OR m.email_name IS NULL)
       AND f.send_date >= DATE_TRUNC('MONTH', DATEADD('MONTH', -6, CURRENT_DATE))
       AND f.send_date < DATE_TRUNC('MONTH', CURRENT_DATE)
@@ -1362,9 +1433,9 @@ verified_queries:
           1
         ) AS ctor_pct
       FROM
-        V_FACT_SFMC_PERFORMANCE_TRACKING f
-        LEFT JOIN V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
-        LEFT JOIN V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
+        AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING f
+        LEFT JOIN AGENT_V_DIM_SFMC_METADATA_JOB m ON f.comp_key = m.comp_key
+        LEFT JOIN AGENT_V_DIM_COUNTRY c ON f.business_unit = c.vc_country_code
       WHERE
         (
           m.email_name NOT ILIKE '%sparkpost%'

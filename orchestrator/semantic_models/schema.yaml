@@ -1,351 +1,9 @@
 name: SFMC_EMAIL_PERFORMANCE_DEV
 description: "Salesforce Marketing Cloud email campaign performance analytics for Volvo.\nTracks sends, opens, clicks, bounces,
   and unsubscribes across business units and markets.\nPrimary use cases: campaign performance monitoring, engagement rate
-  analysis, \nmarket comparisons, and trend reporting.\n\nBusiness Units: VCUK (UK), VCDE (Germany), VCFR (France), VCES (Spain),\
-  \ \nVCIT (Italy), VCNL (Netherlands), VCBE (Belgium), and others.\n"
+  analysis, \nmarket comparisons, and trend reporting.\n"
 tables:
-- name: CORTEX_SFMC_BENCHMARK_THRESHOLDS
-  synonyms:
-  - benchmark
-  - benchmarks
-  - industry_benchmark
-  - industry_standard
-  - kpi_target
-  - performance_standard
-  - target_range
-  - threshold
-  - thresholds
-  description: "Industry benchmark thresholds for email marketing metrics (2024-2025).\nUse to auto-classify performance as
-    critical/warning/good/strong/excellent.\nSupports: open_rate, click_rate, ctor, optout_rate, bounce_rate.\nCan filter
-    by EMAIL_TYPE: all, triggered, program, campaign, enewsletter, service_reminder."
-  base_table:
-    database: DEV_MARCOM_DB
-    schema: APP_DIRECTMARKETING
-    table: CORTEX_SFMC_BENCHMARK_THRESHOLDS
-  dimensions:
-  - name: ACTION_REQUIRED
-    synonyms:
-    - action
-    - action_plan
-    - actions
-    - corrective_action
-    - how_to_fix
-    - improvement_action
-    - next_steps
-    - optimization_steps
-    - recommendation
-    - recommendations
-    - remediation
-    - suggested_action
-    - what_to_do
-    description: Recommended actions or next steps based on performance analysis or benchmark comparisons. Provides 
-      guidance for improving metrics that fall below target thresholds.
-    expr: ACTION_REQUIRED
-    data_type: VARCHAR(500)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - Monitor closely. Consider A/B testing subject lines and improving segmentation.
-    - Maintain current practices. Continue optimization efforts.
-    - Immediate attention needed. Check deliverability, subject lines, sender reputation, and list quality.
-  - name: BENCHMARK_ID
-    synonyms:
-    - benchmark_code
-    - benchmark_identifier
-    - benchmark_key
-    - kpi_threshold_id
-    - record_id
-    - threshold_id
-    - threshold_identifier
-    - threshold_key
-    description: Primary key for benchmark record. Unique identifier combining metric name, email type, and status level
-      (e.g., CTOR_ALL_GOOD, OR_PROGRAM_EXPECTED).
-    expr: BENCHMARK_ID
-    data_type: VARCHAR(100)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - OR_ALL_GOOD
-    - OR_ALL_CRITICAL
-    - OR_ALL_WARNING
-  - name: DESCRIPTION
-    synonyms:
-    - benchmark_context
-    - benchmark_description
-    - benchmark_explanation
-    - context
-    - explanation
-    - interpretation
-    - meaning
-    - threshold_description
-    - threshold_meaning
-    - what_this_means
-    description: Performance threshold descriptions for email marketing benchmarks in the premium automotive industry. 
-      Explains what each threshold range means and provides context for interpretation.y.
-    expr: DESCRIPTION
-    data_type: VARCHAR(1000)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - Open rate below 12% is significantly below premium automotive benchmark.
-    - Open rate 12-15% is mass-market automotive average, below premium target.
-    - Open rate 15-25% meets premium automotive benchmark. This is the Volvo target range.
-  - name: EMAIL_TYPE
-    synonyms:
-    - automation_type
-    - campaign_type
-    - communication_type
-    - content_type
-    - email_category
-    - email_classification
-    - email_kind
-    - journey_type
-    - message_type
-    - send_type
-    description: 'Email type for type-specific benchmarks. Values: all, triggered, program, campaign, enewsletter, service_reminder.
-      Use to get benchmarks specific to different email categories.'
-    expr: EMAIL_TYPE
-    data_type: VARCHAR(50)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-  - name: INDUSTRY
-    synonyms:
-    - business_sector
-    - industry_category
-    - industry_classification
-    - industry_segment
-    - industry_type
-    - market_segment
-    - market_vertical
-    - sector
-    - vertical
-    description: The industry category or sector classification. Default value is 'premium_automotive' for Volvo Cars 
-      benchmarks. Enables industry-specific benchmark comparisons.
-    expr: INDUSTRY
-    data_type: VARCHAR(50)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - premium_automotive
-  - name: IS_INVERSE
-    synonyms:
-    - inverse_benchmark
-    - inverse_flag
-    - inverse_indicator
-    - inverse_metric
-    - lower_is_better
-    - negative_metric
-    - reverse_logic
-    - reversed_threshold
-    description: Indicates whether the benchmark threshold uses inverse logic for evaluation. TRUE for metrics where 
-      lower is better (optout_rate, bounce_rate). FALSE for metrics where higher is better (open_rate, click_rate, 
-      ctor).
-    expr: IS_INVERSE
-    data_type: BOOLEAN
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - 'FALSE'
-    - 'TRUE'
-  - name: METRIC_NAME
-    synonyms:
-    - indicator
-    - kpi
-    - kpi_name
-    - measure
-    - measurement
-    - metric
-    - metric_identifier
-    - metric_type
-    - performance_indicator
-    - performance_metric
-    description: 'The name of the marketing performance metric being measured. Values: open_rate, click_rate, ctor, optout_rate,
-      bounce_rate. Primary dimension for filtering benchmarks.'
-    expr: METRIC_NAME
-    data_type: VARCHAR(50)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - ctor
-    - click_rate
-    - open_rate
-  - name: SEARCH_CONTENT
-    synonyms:
-    - full_text
-    - index_content
-    - indexed_text
-    - search_field
-    - search_index
-    - search_text
-    - searchable_content
-    - semantic_content
-    description: Text content used for searching benchmark threshold data across different email marketing metrics and 
-      time periods. Auto-generated field combining all relevant fields for Cortex Search semantic indexing.
-    expr: SEARCH_CONTENT
-    data_type: VARCHAR(2000)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - 'Metric: open_rate. Email Type: all. Status: good (Good - Premium Benchmark). Threshold: 15.0000% to 25.0000%. Description:
-      Open rate 15-25% meets premium automotive benchmark. This is the Volvo target range. Action: Maintain current practices.
-      Continue optimization efforts. Industry: premium_automotive Period: 2024-2025'
-    - 'Metric: ctor. Email Type: all. Status: strong (Strong - Above Benchmark). Threshold: 18.0000% to 25.0000%. Description:
-      CTOR 18-25% is strong performance. Content resonates well with audience. Action: Excellent. Document successful content
-      strategies. Industry: premium_automotive Period: 2024-2025'
-    - 'Metric: open_rate. Email Type: all. Status: critical (Critical - Below Benchmark). Threshold: Below 12.0000%. Description:
-      Open rate below 12% is significantly below premium automotive benchmark. Action: Immediate attention needed. Check deliverability,
-      subject lines, sender reputation, and list quality. Industry: premium_automotive Period: 2024-2025'
-  - name: STATUS
-    synonyms:
-    - alert_level
-    - benchmark_status
-    - health_level
-    - health_status
-    - performance_level
-    - performance_status
-    - performance_tier
-    - rating
-    - status_level
-    - threshold_status
-    description: 'Performance status levels used for benchmark evaluation and alerting purposes. Values: critical, warning,
-      good, strong, excellent, info. Ordered from worst to best performance.'
-    expr: STATUS
-    data_type: VARCHAR(20)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - good
-    - critical
-    - warning
-  - name: STATUS_LABEL
-    synonyms:
-    - display_status
-    - label_text
-    - performance_label
-    - readable_status
-    - status_description
-    - status_display
-    - status_name
-    - status_text
-    - threshold_label
-    description: Performance status labels indicating how metrics compare against industry benchmarks and standards. 
-      Human-readable labels like 'Good - Premium Benchmark' or 'Critical - Below Benchmark'.
-    expr: STATUS_LABEL
-    data_type: VARCHAR(100)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - Good - Premium Benchmark
-    - Critical - Below Benchmark
-    - Warning - Mass Market Average
-  - name: YEAR_PERIOD
-    synonyms:
-    - benchmark_period
-    - benchmark_timeframe
-    - benchmark_year
-    - data_period
-    - effective_period
-    - period
-    - reference_period
-    - time_period
-    - validity_period
-    description: The year period for benchmark threshold analysis. Default value is '2024-2025' indicating the benchmark
-      validity period. Enables historical benchmark tracking and updates.
-    expr: YEAR_PERIOD
-    data_type: VARCHAR(20)
-    cortex_search_service:
-      database: DEV_MARCOM_DB
-      schema: APP_DIRECTMARKETING
-      service: CORTEX_SFMC_BENCHMARK_SEARCH
-    sample_values:
-    - 2024-2025
-  time_dimensions:
-  - name: LAST_UPDATED
-    synonyms:
-    - audit_timestamp
-    - change_date
-    - last_modified
-    - modification_date
-    - modified_timestamp
-    - refresh_date
-    - update_date
-    - update_timestamp
-    - updated_at
-    description: The timestamp when the benchmark threshold record was last updated. Used for tracking data freshness 
-      and audit purposes.
-    expr: LAST_UPDATED
-    data_type: TIMESTAMP_NTZ(9)
-    sample_values:
-    - 2025-12-29T07:23:07.786+0000
-    - 2025-12-29T07:23:03.182+0000
-    - 2025-12-29T07:23:39.867+0000
-  facts:
-  - name: MAX_VALUE
-    synonyms:
-    - ceiling
-    - max_limit
-    - max_threshold
-    - maximum_limit
-    - maximum_threshold
-    - top_value
-    - upper_bound
-    - upper_limit
-    - upper_range
-    - upper_threshold
-    description: The maximum allowable value for benchmark thresholds. Upper bound of the threshold range in percentage.
-      NULL indicates no upper limit (e.g., >40% for excellent open rate).
-    expr: MAX_VALUE
-    data_type: NUMBER(10,4)
-    access_modifier: public_access
-    sample_values:
-    - '15.0000'
-    - '25.0000'
-    - '12.0000'
-    default_aggregation: 0
-  - name: MIN_VALUE
-    synonyms:
-    - bottom_value
-    - floor
-    - lower_bound
-    - lower_limit
-    - lower_range
-    - lower_threshold
-    - min_limit
-    - min_threshold
-    - minimum_limit
-    - minimum_threshold
-    description: The minimum value threshold used for benchmarking. Lower bound of the threshold range in percentage. 
-      NULL indicates no lower limit (e.g., <12% for critical open rate).
-    expr: MIN_VALUE
-    data_type: NUMBER(10,4)
-    access_modifier: public_access
-    sample_values:
-    - '15.0000'
-    - '12.0000'
-  primary_key:
-    columns:
-    - BENCHMARK_ID
-- name: V_DIM_COUNTRY
+- name: AGENT_V_DIM_COUNTRY
   synonyms:
   - country_dimension
   - country_lookup
@@ -362,8 +20,8 @@ tables:
     used for organizational reporting and analysis.
   base_table:
     database: DEV_MARCOM_DB
-    schema: DM
-    table: V_DIM_COUNTRY
+    schema: AGENT_DIRECTMARKETING
+    table: AGENT_V_DIM_COUNTRY
   dimensions:
   - name: COUNTRY_CODE
     synonyms:
@@ -372,13 +30,13 @@ tables:
     - iso_code
     - iso_country_code
     - two_letter_code
-    description: "The standardized country code (ISO format).\nExamples: UK, DE, FR, ES, IT, NL, BE, JP, KR.\n"
+    description: "The standardized country code (ISO format).\n"
     expr: COUNTRY_CODE
     data_type: VARCHAR(200)
     sample_values:
-    - UK
-    - DE
-    - FR
+    - '"UK"'
+    - '"DE"'
+    - '"FR"'
   - name: COUNTRY_NAME
     synonyms:
     - country
@@ -390,14 +48,13 @@ tables:
     - nation_name
     - state_name
     - territory_name
-    description: "The full name of the country.\nExamples: United Kingdom, Germany, France, Spain, Italy.\nSynonyms: country,
-      nation, market name.\n"
+    description: "The full name of the country.\n"
     expr: COUNTRY_NAME
     data_type: VARCHAR(200)
     sample_values:
-    - Belgium
-    - Albania
-    - North Macedonia
+    - '"Belgium"'
+    - '"Albania"'
+    - '"North Macedonia"'
   - name: MARKET_CD
     synonyms:
     - commercial_market_id
@@ -413,9 +70,9 @@ tables:
     expr: MARKET_CD
     data_type: NUMBER(38,0)
     sample_values:
-    - '441'
-    - '434'
-    - '481'
+    - '"441"'
+    - '"434"'
+    - '"481"'
   - name: REGION_NAME_GROUP
     synonyms:
     - area
@@ -427,31 +84,15 @@ tables:
     - region_name
     - regional_grouping
     - top_level_region
-    description: "The primary regional grouping field for global aggregation and reporting.\n\nCRITICAL QUERY RULES:\n1. **Always
-      use region_name_group as the primary regional field** in all queries\n2. **Never include sub_region in queries** - use
-      only region_name_group for regional filtering and grouping\n3. **Use WHERE c.region_name_group = 'value'** for all regional
-      filters\n\nHierarchy: REGION_NAME_GROUP (regional) > COUNTRY_NAME (country level)\n\nValues in data: EMEA, APEC, US/CAN,
-      LATAM, Other\n\nNatural Language Mapping (User Question → REGION_NAME_GROUP Value):\n- EMEA: \"Europe\", \"European\"\
-      , \"EU\", \"Middle East\", \"Africa\", \"EMEA region\"\n- APEC: \"Asia\", \"Asian\", \"Asia Pacific\", \"APAC\", \"\
-      Pacific\", \"Asia-Pacific region\"\n- US/CAN: \"USA\", \"US\", \"United States\", \"America\", \"Canada\", \"North America\"\
-      , \"NA\"\n- LATAM: \"Latin America\", \"South America\", \"Central America\", \"LatAm\", \"GILA\" (GILA specifically
-      refers to VCBR and VCMX within LATAM)\n- Other: \"Other markets\", \"Greater China\" (if not asking specifically about
-      China), \"Global\"\n- Global/Worldwide: No filter (return all regions)\n\nRegional Coverage:\n- EMEA: All European,
-      Middle Eastern, and African markets\n- APEC: Japan, Korea, Australia, India, Thailand, Malaysia, Singapore, Philippines,
-      Vietnam, etc.\n- US/CAN: United States and Canada\n- LATAM: ALL Latin American countries (Mexico/VCMX, Brazil/VCBR,
-      Argentina, Chile, Colombia, etc.) - GILA specifically refers to VCMX and VCBR\n- Other: Greater China (China, Taiwan,
-      Hong Kong), Global App, Multi-market, Global Major Accounts\n\nExamples:\n- \"What is the open rate in Europe?\" → WHERE
-      c.region_name_group = 'EMEA'\n- \"Show me Asia Pacific performance\" → WHERE c.region_name_group = 'APEC'\n- \"Compare
-      US and Canada vs LATAM\" → WHERE c.region_name_group IN ('US/CAN', 'LATAM')\n- \"Show Nordics performance\" → Use SALES_AREA
-      filter instead\n"
+    description: "The primary regional grouping field for global aggregation and reporting.\n"
     expr: REGION_NAME_GROUP
     data_type: VARCHAR(100)
     sample_values:
-    - APEC
-    - EMEA
-    - US/CAN
-    - LATAM
-    - Other
+    - '"APEC"'
+    - '"EMEA"'
+    - '"US/CAN"'
+    - '"LATAM"'
+    - '"Other"'
   - name: SALES_AREA
     synonyms:
     - business_area
@@ -465,58 +106,40 @@ tables:
     - sales_region
     - sales_territory
     - sales_zone
-    description: "**DETAILED SALES AREA** - Most granular regional breakdown for sales organization.\n\nEMEA Sales Areas:\n\
-      - Nordics: Sweden, Norway, Denmark, Finland, Iceland\n- Central Europe: Germany, Netherlands, Switzerland, Austria\n\
-      - Western Europe: France, Spain, Italy, Portugal, Belgium\n- UK & Ireland: United Kingdom, Ireland\n- Eastern Europe:
-      Poland, Greece, Turkey, Russia, South Africa, etc.\n- EMEA Importers: Smaller EMEA markets\n\nAPEC Sales Areas:\n- APEC
-      NSC: Japan, Korea, Australia, Thailand, Malaysia, India, Bangladesh\n- APEC Importers: Singapore, Philippines, Vietnam,
-      New Zealand, etc.\n\nUSA and Canada Sales Area:\n- USA and Canada: United States, Canada\n\nLATAM Sales Areas:\n- LATAM
-      NSC (also known as GILA): Mexico (VCMX), Brazil (VCBR)\n- LATAM Importers: All other Latin American countries (Argentina,
-      Chile, Colombia, etc.)\n\nOther/Special Sales Areas:\n- Greater China: China, Taiwan, Hong Kong\n- Global App: Global
-      application markets\n- Multi-market app: Multi-market applications\n- Global Major Accounts: Special global accounts\n\
-      - Special Vehicles & GSS\n\nUse SALES_AREA when user asks about:\n- \"Nordics\", \"Scandinavia\"\n- \"Central Europe\"\
-      , \"DACH\"\n- \"Western Europe\"\n- \"APEC NSC\", \"APEC Importers\"\n- \"LATAM NSC\", \"LATAM Importers\"\n"
+    description: "A group of countries categorized by geographic region.\n"
     expr: SALES_AREA
     data_type: VARCHAR(100)
     sample_values:
-    - Nordics
-    - Central Europe
-    - Western Europe
-    - UK & Ireland
-    - Eastern Europe
-    - EMEA Importers
-    - APEC NSC
-    - APEC Importers
-    - USA and Canada
-    - LATAM NSC
-    - LATAM Importers
-    - Greater China
-    - Global App
-    - Multi-market app
-    - Global Major Accounts
+    - '"Nordics"'
+    - '"Central Europe"'
+    - '"Western Europe"'
+    - '"UK & Ireland"'
+    - '"Eastern Europe"'
+    - '"EMEA Importers"'
+    - '"APEC NSC"'
+    - '"APEC Importers"'
+    - '"USA and Canada"'
+    - '"LATAM NSC"'
+    - '"LATAM Importers"'
+    - '"Greater China"'
+    - '"Global App"'
+    - '"Multi-market app"'
+    - '"Global Major Accounts"'
   - name: SUB_REGION
     synonyms:
     - regional_segment
     - sub_region_name
     - subregion
-    description: "**DO NOT USE THIS FIELD** - Use REGION_NAME_GROUP instead.\n\nThis field is deprecated for queries. Always
-      use REGION_NAME_GROUP as the primary regional field.\n\nValues: APEC, EMEA, USA and Canada, LATAM, Other, Greater China\n\
-      \nMapping to REGION_NAME_GROUP:\n- APEC → APEC (same)\n- EMEA → EMEA (same)\n- USA and Canada → US/CAN (naming difference)\n\
-      - LATAM → LATAM (same, includes ALL Latin American countries including Mexico/Brazil)\n- Greater China → Other (categorization
-      difference)\n- Other → Other (includes Global, Multi-market, Global Major Accounts)\n\nCRITICAL QUERY RULES:\n1. **DO
-      NOT use sub_region in queries**\n2. **Always use region_name_group** for all regional filtering and grouping\n3. **Never
-      include sub_region in SELECT or GROUP BY clauses**\n\nExamples:\n- \"Show EMEA performance\" → WHERE c.region_name_group
-      = 'EMEA'\n- \"Show all Latin America\" → WHERE c.region_name_group = 'LATAM'\n- \"Show APEC markets\" → WHERE c.region_name_group
-      = 'APEC'\n"
+    description: "Geographic areas where sales activities are conducted.\n"
     expr: SUB_REGION
     data_type: VARCHAR(100)
     sample_values:
-    - APEC
-    - EMEA
-    - Greater China
-    - LATAM
-    - Other
-    - USA and Canada
+    - '"APEC"'
+    - '"EMEA"'
+    - '"Greater China"'
+    - '"LATAM"'
+    - '"Other"'
+    - '"USA and Canada"'
   - name: VC_COUNTRY_CODE
     synonyms:
     - bu_code
@@ -529,14 +152,13 @@ tables:
     - volvo_cars_country_code
     - volvo_country_code
     - volvo_country_id
-    description: "Volvo Cars specific country code identifier.\nPrimary key for joining to fact table via BUSINESSUNIT.\n\
-      Examples: VCUK, VCDE, VCFR, VCES, VCIT, VCNL, VCBE, VCJP, VCKR.\n"
+    description: "Volvo Cars specific country code identifier.\n"
     expr: VC_COUNTRY_CODE
     data_type: VARCHAR(202)
     sample_values:
-    - VCMK
-    - VCAL
-    - VCFR
+    - '"VCMK"'
+    - '"VCAL"'
+    - '"VCFR"'
   filters:
   - name: apac_region
     synonyms:
@@ -755,7 +377,7 @@ tables:
   primary_key:
     columns:
     - VC_COUNTRY_CODE
-- name: V_DIM_SFMC_ALIAS
+- name: AGENT_V_DIM_SFMC_ALIAS
   synonyms:
   - content_block_references
   - email_blocks
@@ -772,8 +394,8 @@ tables:
     link tracking information.
   base_table:
     database: DEV_MARCOM_DB
-    schema: DM
-    table: V_DIM_SFMC_ALIAS
+    schema: AGENT_DIRECTMARKETING
+    table: AGENT_V_DIM_SFMC_ALIAS
   dimensions:
   - name: ALIAS
     synonyms:
@@ -786,9 +408,9 @@ tables:
     expr: ALIAS
     data_type: VARCHAR(16777216)
     sample_values:
-    - others
-    - EX40_BEV_features_BlockType%3a%3a1COLB_BlockPosition%3a%3a2_LinkType%3a%3aCTA1_LinkText%3a%3aUtforskadinVolvo_LanguageCode%3a%3aSV%26OTD_GUID_37ba29dc-ff8c-4b1f-901e-e583bf6ac39b
-    - EX40_BEV_features_BlockType%3a%3a1COLB_BlockPosition%3a%3a3_LinkType%3a%3aCTA1_LinkText%3a%3aTutustuVolvoosi_LanguageCode%3a%3aFI%26OTD_GUID_6a2d439b-2621-4ca3-adff-361009bd3b72
+    - '"others"'
+    - '"EX40_BEV_features_BlockType%3a%3a1COLB_BlockPosition%3a%3a2_LinkType%3a%3aCTA1_LinkText%3a%3aUtforskadinVolvo_LanguageCode%3a%3aSV%26OTD_GUID_37ba29dc-ff8c-4b1f-901e-e583bf6ac39b"'
+    - '"EX40_BEV_features_BlockType%3a%3a1COLB_BlockPosition%3a%3a3_LinkType%3a%3aCTA1_LinkText%3a%3aTutustuVolvoosi_LanguageCode%3a%3aFI%26OTD_GUID_6a2d439b-2621-4ca3-adff-361009bd3b72"'
   - name: ALIAS_RAW
     synonyms:
     - original_alias
@@ -799,9 +421,9 @@ tables:
     expr: ALIAS_RAW
     data_type: VARCHAR(16777216)
     sample_values:
-    - https://www.volvocars.com/uk/cars/es90-electric/?email_name=VCUK_LCAMP_20250905_10055-for-life-in-balance_ES90-finance-options_EDM1_V1_EN&jobid=2196537&batchid=8&subscriberKey=Mmv0vCkXv9ceJnbtNtqWwnJegWJTzofQ&utm_source=sfmc&utm_medium=email&utm_content=https%3a%2f%2fwww.volvocars.com%2fuk%2fcars%2fes90-electric%2f&utm_campaign=VCUK_LCAMP_20250905_10055-for-life-in-balance_ES90-finance-options_EDM1_V1_EN&campaignCode=&sfmc_id=333062095&hem=c401145f9b75fa33bced6f42f6635b87ec1669f4d56401947c7a28f0ad73288c&ns-EncryptedId=A0xrexGbOi1OXHKBJCKqmSip4dah9o8N
-    - https://www.volvocars.com/us/?utm_source=sfmc&utm_medium=email&utm_content=https%3a%2f%2fwww.volvocars.com%2fus%2f&utm_campaign=VCUS_NOT_CENEWS_20251105_B2C_global-enewsletter-October-2025-All_EDM1_V2_USEN&campaignCode=&email_name=VCUS_NOT_CENEWS_20251105_B2C_global-enewsletter-October-2025-All_EDM1_V2_USEN&hem=a82775adcd90ea263830a16d23d14e6fd7999f262c2ccccca56e77f1bf5d1dbb&ns-EncryptedId=1OUCp+q9DLj7jZlXGtNlM4iL4r2x83azOnn6AebDwNuJsR5iDn+Bjg==&jobid=2208787&batchid=1959&subscriberKey=Bv2EUarhkf5PP6psHtZ/zg==&sfmc_journey_id=c5a5b0e8-b498-4cf4-971a-c8b1b1847e86&sfmc_journey_name=CVSUN_TOC_NEWE_S02521150B_C2g_olab-lnewelsteet-rcOoteb-r0252A-llE_MD_12VU_ESN&sfmc_activity_id=528eda0a-006b-43b5-b365-0ab006035477&sfmc_activity_name=CVSUN_TOC_NEWE_S02521150B_C2g_olab-lnewelsteet-
-    - https://www.volvocars.com/uk/car-finance/faq/volvo-loan/?category=Delivery&utm_source=sfmc&utm_term=&utm_content=4600219&utm_id=dcd193ac-5aa0-473c-b4f1-9be715a03fdd&sfmc_id=945846460&sfmc_activityid=76738ab8-e0ee-49c9-8e75-145e5ceb9ea4&utm_medium=email&utm_campaign=VCUK_CPROG_order-to-delivery_before-delivery_eDM5_V2_EN&email_name=VCUK_CPROG_order-to-delivery_before-delivery_eDM5_V2_EN&jobid=2153516&batchid=212&subscriberKey=goqLAT5/JoH5xzE+mRMJ5SfWDYh+kXmy&utm_source=sfmc&utm_medium=email&utm_content=cbv-otd_cta-link_order-tracking-dynamic&utm_campaign=VCUK_CPROG_order-to-delivery_before-delivery_eDM5_V1_EN&campaignCode=&sfmc_id=945846460&hem=6cd4b341f1f13ddce8b98816875fee43d1755ef5cfc8494fedc973ce27b6a886&ns-EncryptedId=gK4H2hZU5ECP5C+iaj7txXJpaeKXrOgh
+    - '"https://www.volvocars.com/uk/cars/es90-electric/?email_name=VCUK_LCAMP_20250905_10055-for-life-in-balance_ES90-finance-options_EDM1_V1_EN&jobid=2196537&batchid=8&subscriberKey=Mmv0vCkXv9ceJnbtNtqWwnJegWJTzofQ&utm_source=sfmc&utm_medium=email&utm_content=https%3a%2f%2fwww.volvocars.com%2fuk%2fcars%2fes90-electric%2f&utm_campaign=VCUK_LCAMP_20250905_10055-for-life-in-balance_ES90-finance-options_EDM1_V1_EN&campaignCode=&sfmc_id=333062095&hem=c401145f9b75fa33bced6f42f6635b87ec1669f4d56401947c7a28f0ad73288c&ns-EncryptedId=A0xrexGbOi1OXHKBJCKqmSip4dah9o8N"'
+    - '"https://www.volvocars.com/us/?utm_source=sfmc&utm_medium=email&utm_content=https%3a%2f%2fwww.volvocars.com%2fus%2f&utm_campaign=VCUS_NOT_CENEWS_20251105_B2C_global-enewsletter-October-2025-All_EDM1_V2_USEN&campaignCode=&email_name=VCUS_NOT_CENEWS_20251105_B2C_global-enewsletter-October-2025-All_EDM1_V2_USEN&hem=a82775adcd90ea263830a16d23d14e6fd7999f262c2ccccca56e77f1bf5d1dbb&ns-EncryptedId=1OUCp+q9DLj7jZlXGtNlM4iL4r2x83azOnn6AebDwNuJsR5iDn+Bjg==&jobid=2208787&batchid=1959&subscriberKey=Bv2EUarhkf5PP6psHtZ/zg==&sfmc_journey_id=c5a5b0e8-b498-4cf4-971a-c8b1b1847e86&sfmc_journey_name=CVSUN_TOC_NEWE_S02521150B_C2g_olab-lnewelsteet-rcOoteb-r0252A-llE_MD_12VU_ESN&sfmc_activity_id=528eda0a-006b-43b5-b365-0ab006035477&sfmc_activity_name=CVSUN_TOC_NEWE_S02521150B_C2g_olab-lnewelsteet-"'
+    - '"https://www.volvocars.com/uk/car-finance/faq/volvo-loan/?category=Delivery&utm_source=sfmc&utm_term=&utm_content=4600219&utm_id=dcd193ac-5aa0-473c-b4f1-9be715a03fdd&sfmc_id=945846460&sfmc_activityid=76738ab8-e0ee-49c9-8e75-145e5ceb9ea4&utm_medium=email&utm_campaign=VCUK_CPROG_order-to-delivery_before-delivery_eDM5_V2_EN&email_name=VCUK_CPROG_order-to-delivery_before-delivery_eDM5_V2_EN&jobid=2153516&batchid=212&subscriberKey=goqLAT5/JoH5xzE+mRMJ5SfWDYh+kXmy&utm_source=sfmc&utm_medium=email&utm_content=cbv-otd_cta-link_order-tracking-dynamic&utm_campaign=VCUK_CPROG_order-to-delivery_before-delivery_eDM5_V1_EN&campaignCode=&sfmc_id=945846460&hem=6cd4b341f1f13ddce8b98816875fee43d1755ef5cfc8494fedc973ce27b6a886&ns-EncryptedId=gK4H2hZU5ECP5C+iaj7txXJpaeKXrOgh"'
   - name: BLOCKPOSITION
     synonyms:
     - block_location
@@ -813,8 +435,8 @@ tables:
     expr: BLOCKPOSITION
     data_type: VARCHAR(16777216)
     sample_values:
-    - '2'
-    - '6'
+    - '"2"'
+    - '"6"'
   - name: BLOCKTYPE
     synonyms:
     - block_category
@@ -826,8 +448,8 @@ tables:
     expr: BLOCKTYPE
     data_type: VARCHAR(16777216)
     sample_values:
-    - 1COLB
-    - 3GRIDB
+    - '"1COLB"'
+    - '"3GRIDB"'
   - name: LINKTEXT
     synonyms:
     - anchor_text
@@ -839,9 +461,9 @@ tables:
     expr: LINKTEXT
     data_type: VARCHAR(16777216)
     sample_values:
-    - Kaikkilataamisesta
-    - Alltomladdning
-    - JetztKontoerstellen
+    - '"Kaikkilataamisesta"'
+    - '"Alltomladdning"'
+    - '"JetztKontoerstellen"'
   - name: LINKTRACKINGALIAS
     synonyms:
     - click_tracking_id
@@ -852,8 +474,8 @@ tables:
     expr: LINKTRACKINGALIAS
     data_type: VARCHAR(16777216)
     sample_values:
-    - VolvoCarsApp
-    - Electrification
+    - '"VolvoCarsApp"'
+    - '"Electrification"'
   - name: LINKTYPE
     synonyms:
     - hyperlink_classification
@@ -865,12 +487,12 @@ tables:
     expr: LINKTYPE
     data_type: VARCHAR(16777216)
     sample_values:
-    - RichTextLink3
-    - RichTextLink1
+    - '"RichTextLink3"'
+    - '"RichTextLink1"'
   primary_key:
     columns:
     - ALIAS
-- name: V_DIM_SFMC_METADATA_JOB
+- name: AGENT_V_DIM_SFMC_METADATA_JOB
   synonyms:
   - campaign_metadata_view
   - email_campaign_metadata
@@ -887,8 +509,8 @@ tables:
     by vehicle model and geographic region, and compliance tracking.
   base_table:
     database: DEV_MARCOM_DB
-    schema: DM
-    table: V_DIM_SFMC_METADATA_JOB
+    schema: AGENT_DIRECTMARKETING
+    table: AGENT_V_DIM_SFMC_METADATA_JOB
   dimensions:
   - name: AB_TESTING
     synonyms:
@@ -903,8 +525,8 @@ tables:
     expr: AB_TESTING
     data_type: VARCHAR(16777216)
     sample_values:
-    - B
-    - A
+    - '"B"'
+    - '"A"'
   - name: BUSINESS_UNIT
     synonyms:
     - bu
@@ -918,9 +540,9 @@ tables:
     expr: BUSINESS_UNIT
     data_type: VARCHAR(16777216)
     sample_values:
-    - VCCA
-    - VCIN
-    - VCPT
+    - '"VCCA"'
+    - '"VCIN"'
+    - '"VCPT"'
   - name: CAR_MODEL
     synonyms:
     - car
@@ -935,9 +557,9 @@ tables:
     expr: UPPER(TRIM(CAR_MODEL))
     data_type: VARCHAR(15)
     sample_values:
-    - None
-    - XC90
-    - EX30
+    - '"None"'
+    - '"XC90"'
+    - '"EX30"'
   - name: CAR_MODEL_FORMAT
     synonyms:
     - auto_model_structure
@@ -956,9 +578,9 @@ tables:
       THEN 'XC60 MY26 Refresh'\n    ELSE DASHBOARD_CAR_MODEL\nEND"
     data_type: VARCHAR(54)
     sample_values:
-    - EX60
-    - EX90
-    - EX30
+    - '"EX60"'
+    - '"EX90"'
+    - '"EX30"'
   - name: CATALYST_COUNTRY_CODE
     synonyms:
     - brief_country
@@ -977,8 +599,8 @@ tables:
     expr: CATALYST_COUNTRY_CODE
     data_type: VARCHAR(16777216)
     sample_values:
-    - VCCH
-    - VCJP
+    - '"VCCH"'
+    - '"VCJP"'
   - name: CATALYST_TYPE
     synonyms:
     - brief_type
@@ -989,8 +611,8 @@ tables:
     expr: CATALYST_TYPE
     data_type: VARCHAR(16777216)
     sample_values:
-    - CPROG
-    - CENEWS
+    - '"CPROG"'
+    - '"CENEWS"'
   - name: COMMUNICATION_CATEGORY
     synonyms:
     - category
@@ -1002,8 +624,8 @@ tables:
     expr: COMMUNICATION_CATEGORY
     data_type: VARCHAR(16777216)
     sample_values:
-    - NOT
-    - EVT
+    - '"NOT"'
+    - '"EVT"'
   - name: COMP_KEY
     synonyms:
     - business_send_key
@@ -1016,9 +638,9 @@ tables:
     expr: COMP_KEY
     data_type: VARCHAR(16777216)
     sample_values:
-    - 2207635VCDE
-    - 2215541VCMX
-    - 2205462VCCH
+    - '"2207635VCDE"'
+    - '"2215541VCMX"'
+    - '"2205462VCCH"'
   - name: COMPLIANT
     synonyms:
     - approved
@@ -1031,8 +653,8 @@ tables:
     expr: COMPLIANT
     data_type: VARCHAR(13)
     sample_values:
-    - compliant
-    - non compliant
+    - '"compliant"'
+    - '"non compliant"'
   - name: DASHBOARD_CAR_MODEL
     synonyms:
     - dashboard_model
@@ -1042,9 +664,9 @@ tables:
     expr: UPPER(TRIM (DASHBOARD_CAR_MODEL))
     data_type: VARCHAR(54)
     sample_values:
-    - ES90
-    - EX60
-    - XC60
+    - '"ES90"'
+    - '"EX60"'
+    - '"XC60"'
   - name: EMAIL_LANGUAGE
     synonyms:
     - communication_language
@@ -1057,8 +679,8 @@ tables:
     expr: EMAIL_LANGUAGE
     data_type: VARCHAR(16777216)
     sample_values:
-    - JA
-    - EN
+    - '"JA"'
+    - '"EN"'
   - name: EMAIL_NAME
     synonyms:
     - asset_name
@@ -1073,9 +695,9 @@ tables:
     expr: UPPER(EMAIL_NAME)
     data_type: VARCHAR(50331648)
     sample_values:
-    - VCUK_NOT_CENEWS_20251218_B2C_global-enewsletter-December-2025-All_EDM1_V2_EN
-    - VCZA_NOT_CENEWS_20250625_B2C_global-enewsletter-June-2025-All_EDM1_V1_EN
-    - VCFI_CPROG_OTD_Redesign_Accessories_EDM2_V3_SEFI
+    - '"VCUK_NOT_CENEWS_20251218_B2C_global-enewsletter-December-2025-All_EDM1_V2_EN"'
+    - '"VCZA_NOT_CENEWS_20250625_B2C_global-enewsletter-June-2025-All_EDM1_V1_EN"'
+    - '"VCFI_CPROG_OTD_Redesign_Accessories_EDM2_V3_SEFI"'
   - name: EMAIL_NAME_CLEANSED
     synonyms:
     - clean_name
@@ -1087,9 +709,9 @@ tables:
     expr: EMAIL_NAME_CLEANSED
     data_type: VARCHAR(16777216)
     sample_values:
-    - 6monthplus_6monthplus
-    - TestDrive_XC40UltraB3
-    - POP Service - Service Reminder Y1 v3 2504
+    - '"6monthplus_6monthplus"'
+    - '"TestDrive_XC40UltraB3"'
+    - '"POP Service - Service Reminder Y1 v3 2504"'
   - name: EMAIL_SEND_NUMBER
     synonyms:
     - drop_number
@@ -1105,9 +727,9 @@ tables:
     expr: EMAIL_SEND_NUMBER
     data_type: VARCHAR(16777216)
     sample_values:
-    - EDM9
-    - EDM0
-    - EDM4
+    - '"EDM9"'
+    - '"EDM0"'
+    - '"EDM4"'
   - name: EMAIL_SEND_PROCESS
     synonyms:
     - creation_process
@@ -1121,8 +743,8 @@ tables:
     expr: EMAIL_SEND_PROCESS
     data_type: VARCHAR(16777216)
     sample_values:
-    - Outside Direct Engine
-    - Direct Engine
+    - '"Outside Direct Engine"'
+    - '"Direct Engine"'
   - name: EMAIL_SOURCE
     synonyms:
     - creation_source
@@ -1137,8 +759,8 @@ tables:
     expr: EMAIL_SOURCE
     data_type: VARCHAR(8)
     sample_values:
-    - Catalyst
-    - SFMC
+    - '"Catalyst"'
+    - '"SFMC"'
   - name: EMAIL_SUBJECT_LINE
     synonyms:
     - email_subject
@@ -1152,9 +774,9 @@ tables:
     expr: EMAIL_SUBJECT_LINE
     data_type: VARCHAR(16777216)
     sample_values:
-    - La tua garanzia Volvo è in scadenza.
-    - Meet the refreshed XC60
-    - Innovaciones de Volvo. Las puedes tener todas
+    - '"La tua garanzia Volvo è in scadenza."'
+    - '"Meet the refreshed XC60"'
+    - '"Innovaciones de Volvo. Las puedes tener todas"'
   - name: EMAIL_VERSION
     synonyms:
     - creative_version
@@ -1166,8 +788,8 @@ tables:
     expr: EMAIL_VERSION
     data_type: VARCHAR(16777216)
     sample_values:
-    - V3
-    - V1
+    - '"V3"'
+    - '"V1"'
   - name: GEOGRAPHIC_SCOPE
     synonyms:
     - central_or_local
@@ -1179,8 +801,8 @@ tables:
     expr: GEOGRAPHIC_SCOPE
     data_type: VARCHAR(16777216)
     sample_values:
-    - Local
-    - Central
+    - '"Local"'
+    - '"Central"'
   - name: PROGRAM_NAMES
     synonyms:
     - automation_name
@@ -1192,8 +814,8 @@ tables:
     expr: PROGRAM_NAMES
     data_type: VARCHAR(16777216)
     sample_values:
-    - first-year-program
-    - service-reminder
+    - '"first-year-program"'
+    - '"service-reminder"'
   - name: PROGRAM_OR_COMPAIGN
     synonyms:
     - campaign_type
@@ -1212,9 +834,9 @@ tables:
     expr: PROGRAM_OR_COMPAIGN
     data_type: VARCHAR(12)
     sample_values:
-    - Program
-    - E-newsletter
-    - Campaign
+    - '"Program"'
+    - '"E-newsletter"'
+    - '"Campaign"'
   - name: SEND_ID
     synonyms:
     - email_job
@@ -1226,9 +848,9 @@ tables:
     expr: SEND_ID
     data_type: NUMBER(38,0)
     sample_values:
-    - '2220086'
-    - '2202698'
-    - '2189614'
+    - '"2220086"'
+    - '"2202698"'
+    - '"2189614"'
   - name: SEND_TYPE
     synonyms:
     - delivery_type
@@ -1238,8 +860,8 @@ tables:
     expr: SEND_TYPE
     data_type: VARCHAR(16777216)
     sample_values:
-    - Program
-    - E-newsletter
+    - '"Program"'
+    - '"E-newsletter"'
   time_dimensions:
   - name: SEND_DATE
     synonyms:
@@ -1253,9 +875,9 @@ tables:
     expr: SEND_DATE
     data_type: DATE
     sample_values:
-    - '2025-12-09'
-    - '2025-09-01'
-    - '2025-10-10'
+    - '"2025-12-09"'
+    - '"2025-09-01"'
+    - '"2025-10-10"'
   filters:
   - name: campaign
     synonyms:
@@ -1509,14 +1131,14 @@ tables:
   primary_key:
     columns:
     - COMP_KEY
-- name: V_FACT_SFMC_PERFORMANCE_BLOCK
+- name: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
   description: The table contains records of email marketing block performance metrics. Each record represents a 
     specific email block's performance within individual email campaigns, including click engagement data and timing 
     information.
   base_table:
     database: DEV_MARCOM_DB
-    schema: DM
-    table: V_FACT_SFMC_PERFORMANCE_BLOCK
+    schema: AGENT_DIRECTMARKETING
+    table: AGENT_V_FACT_SFMC_PERFORMANCE_BLOCK
   dimensions:
   - name: ALIAS
     synonyms:
@@ -1528,9 +1150,9 @@ tables:
     expr: ALIAS
     data_type: VARCHAR(16777216)
     sample_values:
-    - EX60_Launch_configurator_BlockType::1COLB_BlockPosition::8_LinkType::Img1_LinkText::ZijaanzichtvandebuitenkantvaneenVolvoEX60metverschillendekoetswerkkleuren_LanguageCode::NL&OTD_GUID=0746663f-6019-461c-9bd6-f708dab6cb94
-    - MHEV_PHEV_Accessories_BlockType::3GRIDB_BlockPosition::2_LinkType::CTA1_LinkText::Discoveraccessories_LanguageCode::CAEN&OTD_GUID=42642ce0-528f-415d-ac23-d785a06f712d
-    - Accessories_BlockType::MAINB_BlockPosition::2_LinkType::Img1_LinkText::Enkollasjavforskjelligbiltilbehørsombrukesutendørs._LanguageCode::NO&OTD_GUID=b157aaa9-2a96-4696-ae9c-2cf4c5ad67cd
+    - '"EX60_Launch_configurator_BlockType::1COLB_BlockPosition::8_LinkType::Img1_LinkText::ZijaanzichtvandebuitenkantvaneenVolvoEX60metverschillendekoetswerkkleuren_LanguageCode::NL&OTD_GUID=0746663f-6019-461c-9bd6-f708dab6cb94"'
+    - '"MHEV_PHEV_Accessories_BlockType::3GRIDB_BlockPosition::2_LinkType::CTA1_LinkText::Discoveraccessories_LanguageCode::CAEN&OTD_GUID=42642ce0-528f-415d-ac23-d785a06f712d"'
+    - '"Accessories_BlockType::MAINB_BlockPosition::2_LinkType::Img1_LinkText::Enkollasjavforskjelligbiltilbehørsombrukesutendørs._LanguageCode::NO&OTD_GUID=b157aaa9-2a96-4696-ae9c-2cf4c5ad67cd"'
   - name: BUSINESS_UNIT
     synonyms:
     - bu
@@ -1544,9 +1166,9 @@ tables:
     expr: RIGHT(COMP_KEY, 4)
     data_type: VARCHAR(16777216)
     sample_values:
-    - VCUK
-    - VCIT
-    - VCIE
+    - '"VCUK"'
+    - '"VCIT"'
+    - '"VCIE"'
   - name: COMP_KEY
     synonyms:
     - business_send_key
@@ -1559,9 +1181,9 @@ tables:
     expr: COMP_KEY
     data_type: VARCHAR(16777216)
     sample_values:
-    - 2224536VCBE
-    - 2224445VCSE
-    - 2207411VCUS
+    - '"2224536VCBE"'
+    - '"2224445VCSE"'
+    - '"2207411VCUS"'
   - name: EMAIL_NAME
     synonyms:
     - asset_name
@@ -1577,9 +1199,9 @@ tables:
     expr: EMAIL_NAME
     data_type: VARCHAR(16777216)
     sample_values:
-    - VCUS-EM1-Urgently-Post-Accident_Marketing_Awareness_202507
-    - VCZA_CAL_CCAMP_20260122_10070-life-updated_EX60-Launch_EDM7_V1_EN
-    - VCUS_CPROG_first-year-program-MHEV_Safety_EDM4_V4_USEN
+    - '"VCUS-EM1-Urgently-Post-Accident_Marketing_Awareness_202507"'
+    - '"VCZA_CAL_CCAMP_20260122_10070-life-updated_EX60-Launch_EDM7_V1_EN"'
+    - '"VCUS_CPROG_first-year-program-MHEV_Safety_EDM4_V4_USEN"'
   time_dimensions:
   - name: MIN_EVENTDATE
     synonyms:
@@ -1592,9 +1214,9 @@ tables:
     expr: MIN_EVENTDATE
     data_type: DATE
     sample_values:
-    - '2025-12-02'
-    - '2025-12-01'
-    - '2026-01-24'
+    - '"2025-12-02"'
+    - '"2025-12-01"'
+    - '"2026-01-24"'
   facts:
   - name: UNIQUE_BLOCK_CLICKS
     synonyms:
@@ -1608,10 +1230,10 @@ tables:
     data_type: NUMBER(18,0)
     access_modifier: public_access
     sample_values:
-    - '79'
-    - '610'
-    - '2069'
-- name: V_FACT_SFMC_PERFORMANCE_TRACKING
+    - '"79"'
+    - '"610"'
+    - '"2069"'
+- name: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
   synonyms:
   - campaign_send_analytics
   - direct_marketing_performance
@@ -1628,8 +1250,8 @@ tables:
     activity across different business units.
   base_table:
     database: DEV_MARCOM_DB
-    schema: DM
-    table: V_FACT_SFMC_PERFORMANCE_TRACKING
+    schema: AGENT_DIRECTMARKETING
+    table: AGENT_V_FACT_SFMC_PERFORMANCE_TRACKING
   dimensions:
   - name: BUSINESS_UNIT
     synonyms:
@@ -1646,27 +1268,27 @@ tables:
     expr: BUSINESS_UNIT
     data_type: VARCHAR(16777216)
     sample_values:
-    - VCUK
-    - VCDE
-    - VCFR
-    - VCES
-    - VCIT
-    - VCNL
-    - VCBE
+    - '"VCUK"'
+    - '"VCDE"'
+    - '"VCFR"'
+    - '"VCES"'
+    - '"VCIT"'
+    - '"VCNL"'
+    - '"VCBE"'
   - name: COMP_KEY
     synonyms:
     - composite_key
     - join_key
     - record_key
     - unique_key
-    description: "The composite key combining SEND_ID and BUSINESS_UNIT.\nThis is the join key to V_DIM_SFMC_METADATA_JOB.COMP_KEY.\n\
+    description: "The composite key combining SEND_ID and BUSINESS_UNIT.\nThis is the join key to AGENT_V_DIM_SFMC_METADATA_JOB.COMP_KEY.\n\
       Example: '2149529VCFI'\n"
     expr: COMP_KEY
     data_type: VARCHAR(134217728)
     sample_values:
-    - -2410617105549356863VCVNdatorama
-    - -7169393893336391219VCBRdatorama
-    - 1627699058966484080VCTHdatorama
+    - '"-2410617105549356863VCVNdatorama"'
+    - '"-7169393893336391219VCBRdatorama"'
+    - '"1627699058966484080VCTHdatorama"'
   - name: SEND_ID
     synonyms:
     - email_job
@@ -1678,9 +1300,9 @@ tables:
     expr: SEND_ID
     data_type: NUMBER(38,0)
     sample_values:
-    - '-5950237513146579421'
-    - '5791071666304480150'
-    - '-7439925628603379570'
+    - '"-5950237513146579421"'
+    - '"5791071666304480150"'
+    - '"-7439925628603379570"'
   - name: SOURCE
     synonyms:
     - data_origin
@@ -1691,8 +1313,8 @@ tables:
     expr: SOURCE
     data_type: VARCHAR(16777216)
     sample_values:
-    - sfmc
-    - datorama
+    - '"sfmc"'
+    - '"datorama"'
   time_dimensions:
   - name: DATE_KEY
     synonyms:
@@ -1703,9 +1325,9 @@ tables:
     expr: TO_CHAR(SEND_DATE, 'YYYYMMDD')
     data_type: VARCHAR(134217728)
     sample_values:
-    - '20220406'
-    - '20250628'
-    - '20250524'
+    - '"20220406"'
+    - '"20250628"'
+    - '"20250524"'
   - name: DAY_OF_MONTH
     synonyms:
     - date_day
@@ -1716,9 +1338,9 @@ tables:
     expr: DAY(SEND_DATE)
     data_type: NUMBER(2,0)
     sample_values:
-    - '21'
-    - '17'
-    - '30'
+    - '"21"'
+    - '"17"'
+    - '"30"'
   - name: HALF_YEAR
     synonyms:
     - first_half
@@ -1734,8 +1356,8 @@ tables:
     expr: CASE WHEN MONTH(SEND_DATE) <= 6 THEN 'H1' ELSE 'H2' END
     data_type: VARCHAR(2)
     sample_values:
-    - H1
-    - H2
+    - '"H1"'
+    - '"H2"'
   - name: IS_WEEKEND
     synonyms:
     - day_type
@@ -1747,8 +1369,8 @@ tables:
     expr: CASE WHEN DAYOFWEEKISO(SEND_DATE) IN (6, 7) THEN 'Weekend' ELSE 'Weekday' END
     data_type: VARCHAR(7)
     sample_values:
-    - Weekend
-    - Weekday
+    - '"Weekend"'
+    - '"Weekday"'
   - name: MONTH_DAY
     synonyms:
     - day_month
@@ -1759,9 +1381,9 @@ tables:
     expr: TO_CHAR(SEND_DATE, 'MM-DD')
     data_type: VARCHAR(134217728)
     sample_values:
-    - 12-26
-    - 02-04
-    - 03-06
+    - '"12-26"'
+    - '"02-04"'
+    - '"03-06"'
   - name: MONTH_NAME
     synonyms:
     - month_abbrev
@@ -1771,9 +1393,9 @@ tables:
     expr: TO_CHAR(SEND_DATE, 'Mon')
     data_type: VARCHAR(134217728)
     sample_values:
-    - May
-    - Jan
-    - Feb
+    - '"May"'
+    - '"Jan"'
+    - '"Feb"'
   - name: MONTH_NAME_FULL
     synonyms:
     - full_month_name
@@ -1785,9 +1407,9 @@ tables:
       \  WHEN 10 THEN 'October'\n  WHEN 11 THEN 'November'\n  WHEN 12 THEN 'December'\nEND"
     data_type: VARCHAR(134217728)
     sample_values:
-    - December
-    - June
-    - May
+    - '"December"'
+    - '"June"'
+    - '"May"'
   - name: MONTH_NUMBER
     synonyms:
     - month_index
@@ -1797,9 +1419,9 @@ tables:
     expr: MONTH(SEND_DATE)
     data_type: NUMBER(2,0)
     sample_values:
-    - '10'
-    - '6'
-    - '1'
+    - '"10"'
+    - '"6"'
+    - '"1"'
   - name: QUARTER_NAME
     synonyms:
     - fiscal_quarter
@@ -1812,10 +1434,10 @@ tables:
     expr: "'Q' || QUARTER(SEND_DATE)"
     data_type: VARCHAR(134217728)
     sample_values:
-    - Q4
-    - Q1
-    - Q3
-    - Q2
+    - '"Q4"'
+    - '"Q1"'
+    - '"Q3"'
+    - '"Q2"'
   - name: SEND_DATE
     synonyms:
     - campaign_date
@@ -1831,9 +1453,9 @@ tables:
     expr: SEND_DATE
     data_type: DATE
     sample_values:
-    - '2021-10-05'
-    - '2021-10-07'
-    - '2022-06-01'
+    - '"2021-10-05"'
+    - '"2021-10-07"'
+    - '"2022-06-01"'
   - name: SEND_MONTH
     synonyms:
     - campaign_month
@@ -1847,9 +1469,9 @@ tables:
     expr: DATE_TRUNC('MONTH', SEND_DATE)
     data_type: DATE
     sample_values:
-    - '2025-07-01'
-    - '2025-09-01'
-    - '2021-09-01'
+    - '"2025-07-01"'
+    - '"2025-09-01"'
+    - '"2021-09-01"'
   - name: SEND_QUARTER
     synonyms:
     - campaign_quarter
@@ -1872,9 +1494,9 @@ tables:
     expr: TO_CHAR(SEND_DATE, 'MON')
     data_type: VARCHAR(134217728)
     sample_values:
-    - Apr
-    - Sep
-    - Feb
+    - '"Apr"'
+    - '"Sep"'
+    - '"Feb"'
   - name: WEEK_NAME
     synonyms:
     - week
@@ -1884,9 +1506,9 @@ tables:
     expr: "'W' || LPAD(WEEKISO( SEND_DATE)::STRING, 2, '0')"
     data_type: VARCHAR(134217728)
     sample_values:
-    - W29
-    - W03
-    - W08
+    - '"W29"'
+    - '"W03"'
+    - '"W08"'
   - name: WEEK_NUMBER
     synonyms:
     - iso_week_number
@@ -1897,9 +1519,9 @@ tables:
     expr: WEEKISO(SEND_DATE)
     data_type: NUMBER(2,0)
     sample_values:
-    - '52'
-    - '14'
-    - '35'
+    - '"52"'
+    - '"14"'
+    - '"35"'
   - name: WEEKDAY_NAME
     synonyms:
     - day_name
@@ -1911,9 +1533,9 @@ tables:
     expr: DAYNAME(SEND_DATE)
     data_type: VARCHAR(3)
     sample_values:
-    - Tue
-    - Sun
-    - Wed
+    - '"Tue"'
+    - '"Sun"'
+    - '"Wed"'
   - name: WEEKDAY_NUMBER
     synonyms:
     - day_of_week_number
@@ -1923,9 +1545,9 @@ tables:
     expr: DAYOFWEEKISO(SEND_DATE)
     data_type: NUMBER(2,0)
     sample_values:
-    - '1'
-    - '6'
-    - '2'
+    - '"1"'
+    - '"6"'
+    - '"2"'
   - name: YEAR_MONTH
     synonyms:
     - month_year
@@ -1937,9 +1559,9 @@ tables:
     expr: TO_CHAR(SEND_DATE, 'YYYY-MM')
     data_type: VARCHAR(134217728)
     sample_values:
-    - 2025-10
-    - 2025-11
-    - 2025-06
+    - '"2025-10"'
+    - '"2025-11"'
+    - '"2025-06"'
   - name: YEAR_MONTH_SHORT
     synonyms:
     - short_period
@@ -1948,9 +1570,9 @@ tables:
     expr: TO_CHAR(SEND_DATE, 'YY-MM')
     data_type: VARCHAR(134217728)
     sample_values:
-    - 22-04
-    - 25-05
-    - 21-01
+    - '"22-04"'
+    - '"25-05"'
+    - '"21-01"'
   - name: YEAR_NUMBER
     synonyms:
     - calendar_year
@@ -1960,9 +1582,9 @@ tables:
     expr: YEAR(SEND_DATE)
     data_type: NUMBER(4,0)
     sample_values:
-    - '2021'
-    - '2025'
-    - '2020'
+    - '"2021"'
+    - '"2025"'
+    - '"2020"'
   - name: YEAR_QUARTER
     synonyms:
     - quarter_year
@@ -1972,9 +1594,9 @@ tables:
     expr: YEAR(SEND_DATE) || '-' || 'Q' || QUARTER(SEND_DATE)
     data_type: VARCHAR(134217728)
     sample_values:
-    - 2021-Q2
-    - 2022-Q2
-    - 2021-Q4
+    - '"2021-Q2"'
+    - '"2022-Q2"'
+    - '"2021-Q4"'
   facts:
   - name: BOUNCES
     synonyms:
@@ -1987,9 +1609,9 @@ tables:
     data_type: NUMBER(38,0)
     access_modifier: public_access
     sample_values:
-    - '0'
-    - '975'
-    - '10'
+    - '"0"'
+    - '"975"'
+    - '"10"'
   - name: CLICKS
     synonyms:
     - clicks_raw
@@ -2011,9 +1633,9 @@ tables:
     data_type: NUMBER(38,0)
     access_modifier: public_access
     sample_values:
-    - '1'
-    - '4'
-    - '2'
+    - '"1"'
+    - '"4"'
+    - '"2"'
   - name: SENDS
     synonyms:
     - delivery_attempts
@@ -2026,9 +1648,9 @@ tables:
     data_type: NUMBER(38,0)
     access_modifier: public_access
     sample_values:
-    - '5'
-    - '3'
-    - '2'
+    - '"5"'
+    - '"3"'
+    - '"2"'
   - name: UNIQUE_CLICKS
     synonyms:
     - raw_unique_clicks
@@ -2040,9 +1662,9 @@ tables:
     data_type: NUMBER(38,0)
     access_modifier: public_access
     sample_values:
-    - '1'
-    - '31'
-    - '2'
+    - '"1"'
+    - '"31"'
+    - '"2"'
   - name: UNIQUE_OPENS
     synonyms:
     - raw_unique_opens
@@ -2054,9 +1676,9 @@ tables:
     data_type: NUMBER(38,0)
     access_modifier: public_access
     sample_values:
-    - '0'
-    - '3'
-    - '5'
+    - '"0"'
+    - '"3"'
+    - '"5"'
   - name: UNSUBSCRIBES
     synonyms:
     - raw_unsubscribes
@@ -2068,9 +1690,9 @@ tables:
     data_type: NUMBER(38,0)
     access_modifier: public_access
     sample_values:
-    - '0'
-    - '127'
-    - '1'
+    - '"0"'
+    - '"127"'
+    - '"1"'
   filters:
   - name: critical_optout
     synonyms:
@@ -2607,3 +2229,300 @@ tables:
   primary_key:
     columns:
     - COMP_KEY
+- name: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+  synonyms:
+  - benchmark
+  - benchmarks
+  - industry_benchmark
+  - industry_standard
+  - kpi_target
+  - performance_standard
+  - target_range
+  - threshold
+  - thresholds
+  description: "Industry benchmark thresholds for email marketing metrics (2024-2025).\nUse to auto-classify performance as
+    critical/warning/good/strong/excellent.\nSupports: open_rate, click_rate, ctor, optout_rate, bounce_rate.\nCan filter
+    by EMAIL_TYPE: all, triggered, program, campaign, enewsletter, service_reminder."
+  base_table:
+    database: DEV_MARCOM_DB
+    schema: AGENT_DIRECTMARKETING
+    table: CORTEX_SFMC_BENCHMARK_THRESHOLDS
+  dimensions:
+  - name: ACTION_REQUIRED
+    synonyms:
+    - action
+    - action_plan
+    - actions
+    - corrective_action
+    - how_to_fix
+    - improvement_action
+    - next_steps
+    - optimization_steps
+    - recommendation
+    - recommendations
+    - remediation
+    - suggested_action
+    - what_to_do
+    description: Recommended actions or next steps based on performance analysis or benchmark comparisons. Provides 
+      guidance for improving metrics that fall below target thresholds.
+    expr: ACTION_REQUIRED
+    data_type: VARCHAR(500)
+    sample_values:
+    - Monitor closely. Consider A/B testing subject lines and improving segmentation.
+    - Maintain current practices. Continue optimization efforts.
+    - Immediate attention needed. Check deliverability, subject lines, sender reputation, and list quality.
+  - name: BENCHMARK_ID
+    synonyms:
+    - benchmark_code
+    - benchmark_identifier
+    - benchmark_key
+    - kpi_threshold_id
+    - record_id
+    - threshold_id
+    - threshold_identifier
+    - threshold_key
+    description: Primary key for benchmark record. Unique identifier combining metric name, email type, and status level
+      (e.g., CTOR_ALL_GOOD, OR_PROGRAM_EXPECTED).
+    expr: BENCHMARK_ID
+    data_type: VARCHAR(100)
+    sample_values:
+    - OR_ALL_GOOD
+    - OR_ALL_CRITICAL
+    - OR_ALL_WARNING
+  - name: DESCRIPTION
+    synonyms:
+    - benchmark_context
+    - benchmark_description
+    - benchmark_explanation
+    - context
+    - explanation
+    - interpretation
+    - meaning
+    - threshold_description
+    - threshold_meaning
+    - what_this_means
+    description: Performance threshold descriptions for email marketing benchmarks in the premium automotive industry. 
+      Explains what each threshold range means and provides context for interpretation.y.
+    expr: DESCRIPTION
+    data_type: VARCHAR(1000)
+    sample_values:
+    - Open rate below 12% is significantly below premium automotive benchmark.
+    - Open rate 12-15% is mass-market automotive average, below premium target.
+    - Open rate 15-25% meets premium automotive benchmark. This is the Volvo target range.
+  - name: EMAIL_TYPE
+    synonyms:
+    - automation_type
+    - campaign_type
+    - communication_type
+    - content_type
+    - email_category
+    - email_classification
+    - email_kind
+    - journey_type
+    - message_type
+    - send_type
+    description: 'Email type for type-specific benchmarks. Values: all, triggered, program, campaign, enewsletter, service_reminder.
+      Use to get benchmarks specific to different email categories.'
+    expr: EMAIL_TYPE
+    data_type: VARCHAR(50)
+  - name: INDUSTRY
+    synonyms:
+    - business_sector
+    - industry_category
+    - industry_classification
+    - industry_segment
+    - industry_type
+    - market_segment
+    - market_vertical
+    - sector
+    - vertical
+    description: The industry category or sector classification. Default value is 'premium_automotive' for Volvo Cars 
+      benchmarks. Enables industry-specific benchmark comparisons.
+    expr: INDUSTRY
+    data_type: VARCHAR(50)
+    sample_values:
+    - premium_automotive
+  - name: IS_INVERSE
+    synonyms:
+    - inverse_benchmark
+    - inverse_flag
+    - inverse_indicator
+    - inverse_metric
+    - lower_is_better
+    - negative_metric
+    - reverse_logic
+    - reversed_threshold
+    description: Indicates whether the benchmark threshold uses inverse logic for evaluation. TRUE for metrics where 
+      lower is better (optout_rate, bounce_rate). FALSE for metrics where higher is better (open_rate, click_rate, 
+      ctor).
+    expr: IS_INVERSE
+    data_type: BOOLEAN
+    sample_values:
+    - 'FALSE'
+    - 'TRUE'
+  - name: METRIC_NAME
+    synonyms:
+    - indicator
+    - kpi
+    - kpi_name
+    - measure
+    - measurement
+    - metric
+    - metric_identifier
+    - metric_type
+    - performance_indicator
+    - performance_metric
+    description: 'The name of the marketing performance metric being measured. Values: open_rate, click_rate, ctor, optout_rate,
+      bounce_rate. Primary dimension for filtering benchmarks.'
+    expr: METRIC_NAME
+    data_type: VARCHAR(50)
+    sample_values:
+    - ctor
+    - click_rate
+    - open_rate
+  - name: SEARCH_CONTENT
+    synonyms:
+    - full_text
+    - index_content
+    - indexed_text
+    - search_field
+    - search_index
+    - search_text
+    - searchable_content
+    - semantic_content
+    description: Text content used for searching benchmark threshold data across different email marketing metrics and 
+      time periods. Auto-generated field combining all relevant fields for Cortex Search semantic indexing.
+    expr: SEARCH_CONTENT
+    data_type: VARCHAR(2000)
+    sample_values:
+    - 'Metric: open_rate. Email Type: all. Status: good (Good - Premium Benchmark). Threshold: 15.0000% to 25.0000%. Description:
+      Open rate 15-25% meets premium automotive benchmark. This is the Volvo target range. Action: Maintain current practices.
+      Continue optimization efforts. Industry: premium_automotive Period: 2024-2025'
+    - 'Metric: ctor. Email Type: all. Status: strong (Strong - Above Benchmark). Threshold: 18.0000% to 25.0000%. Description:
+      CTOR 18-25% is strong performance. Content resonates well with audience. Action: Excellent. Document successful content
+      strategies. Industry: premium_automotive Period: 2024-2025'
+    - 'Metric: open_rate. Email Type: all. Status: critical (Critical - Below Benchmark). Threshold: Below 12.0000%. Description:
+      Open rate below 12% is significantly below premium automotive benchmark. Action: Immediate attention needed. Check deliverability,
+      subject lines, sender reputation, and list quality. Industry: premium_automotive Period: 2024-2025'
+  - name: STATUS
+    synonyms:
+    - alert_level
+    - benchmark_status
+    - health_level
+    - health_status
+    - performance_level
+    - performance_status
+    - performance_tier
+    - rating
+    - status_level
+    - threshold_status
+    description: 'Performance status levels used for benchmark evaluation and alerting purposes. Values: critical, warning,
+      good, strong, excellent, info. Ordered from worst to best performance.'
+    expr: STATUS
+    data_type: VARCHAR(20)
+    sample_values:
+    - good
+    - critical
+    - warning
+  - name: STATUS_LABEL
+    synonyms:
+    - display_status
+    - label_text
+    - performance_label
+    - readable_status
+    - status_description
+    - status_display
+    - status_name
+    - status_text
+    - threshold_label
+    description: Performance status labels indicating how metrics compare against industry benchmarks and standards. 
+      Human-readable labels like 'Good - Premium Benchmark' or 'Critical - Below Benchmark'.
+    expr: STATUS_LABEL
+    data_type: VARCHAR(100)
+    sample_values:
+    - Good - Premium Benchmark
+    - Critical - Below Benchmark
+    - Warning - Mass Market Average
+  - name: YEAR_PERIOD
+    synonyms:
+    - benchmark_period
+    - benchmark_timeframe
+    - benchmark_year
+    - data_period
+    - effective_period
+    - period
+    - reference_period
+    - time_period
+    - validity_period
+    description: The year period for benchmark threshold analysis. Default value is '2024-2025' indicating the benchmark
+      validity period. Enables historical benchmark tracking and updates.
+    expr: YEAR_PERIOD
+    data_type: VARCHAR(20)
+    sample_values:
+    - 2024-2025
+  time_dimensions:
+  - name: LAST_UPDATED
+    synonyms:
+    - audit_timestamp
+    - change_date
+    - last_modified
+    - modification_date
+    - modified_timestamp
+    - refresh_date
+    - update_date
+    - update_timestamp
+    - updated_at
+    description: The timestamp when the benchmark threshold record was last updated. Used for tracking data freshness 
+      and audit purposes.
+    expr: LAST_UPDATED
+    data_type: TIMESTAMP_NTZ(9)
+    sample_values:
+    - 2025-12-29T07:23:07.786+0000
+    - 2025-12-29T07:23:03.182+0000
+    - 2025-12-29T07:23:39.867+0000
+  facts:
+  - name: MAX_VALUE
+    synonyms:
+    - ceiling
+    - max_limit
+    - max_threshold
+    - maximum_limit
+    - maximum_threshold
+    - top_value
+    - upper_bound
+    - upper_limit
+    - upper_range
+    - upper_threshold
+    description: The maximum allowable value for benchmark thresholds. Upper bound of the threshold range in percentage.
+      NULL indicates no upper limit (e.g., >40% for excellent open rate).
+    expr: MAX_VALUE
+    data_type: NUMBER(10,4)
+    access_modifier: public_access
+    sample_values:
+    - '15.0000'
+    - '25.0000'
+    - '12.0000'
+    default_aggregation: 0
+  - name: MIN_VALUE
+    synonyms:
+    - bottom_value
+    - floor
+    - lower_bound
+    - lower_limit
+    - lower_range
+    - lower_threshold
+    - min_limit
+    - min_threshold
+    - minimum_limit
+    - minimum_threshold
+    description: The minimum value threshold used for benchmarking. Lower bound of the threshold range in percentage. 
+      NULL indicates no lower limit (e.g., <12% for critical open rate).
+    expr: MIN_VALUE
+    data_type: NUMBER(10,4)
+    access_modifier: public_access
+    sample_values:
+    - '15.0000'
+    - '12.0000'
+  primary_key:
+    columns:
+    - BENCHMARK_ID

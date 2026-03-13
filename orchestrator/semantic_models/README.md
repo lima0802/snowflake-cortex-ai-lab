@@ -1,14 +1,11 @@
 # Modular Semantic Model Structure
 
-**Model:** DEV_MARCOM.AGENT_DIRECTMARKETING.SFMC_EMAIL_PERFORMANCE_DEV  
-**Created:** 2026-03-09  
+**Model:** SFMC_EMAIL_PERFORMANCE_DEV  
+**Created:** 2026-03-12  
 **Description:** Salesforce Marketing Cloud email campaign performance analytics for Volvo.
 Tracks sends, opens, clicks, bounces, and unsubscribes across business units and markets.
 Primary use cases: campaign performance monitoring, engagement rate analysis, 
 market comparisons, and trend reporting.
-
-Business Units: VCUK (UK), VCDE (Germany), VCFR (France), VCES (Spain), 
-VCIT (Italy), VCNL (Netherlands), VCBE (Belgium), and others.
 
 
 ---
@@ -20,7 +17,7 @@ This semantic model is split into three modular components:
 ### 1. `schema.yaml` - Table Schemas
 - **Purpose:** Define all tables, dimensions, measures, and time dimensions
 - **Update when:** Adding/modifying tables or columns
-- **Size:** ~91533 characters
+- **Size:** ~86501 characters
 
 ### 2. `instructions.yaml` - Business Rules
 - **Purpose:** Define how Cortex Analyst should interpret queries
@@ -90,5 +87,5 @@ python scripts/deploy_semantic_model.py --stage TEST_SEMANTIC_MODELS
 
 ---
 
-**Last Split:** 2026-03-09 17:33:03  
+**Last Split:** 2026-03-12 12:18:41  
 **Original File:** config\semantic_models\semantic.yaml
